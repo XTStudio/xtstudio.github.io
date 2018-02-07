@@ -20,6 +20,9 @@
 
 ## Web
 
-点击[此处](http://www.baidu.com/)开启一个预览页面，它会把 Web 端的页面渲染在一个 iframe 中，同时在页面右方生成一个二维码。
+你可以使用在线 Playground 调试页面 [http://xt-studio.com/XT-Playground-Web/](http://xt-studio.com/XT-Playground-Web/)。
 
-此外，使用 iOS / Android Playground App 扫描这个二维码更可体验在手机上渲染的效果。 
+1. 如果你已经在本机开启 VSCode 并已启动调试模式，那么 Playground 将自动呈现你当前的工程输出。
+2. 否则，Playground 将进入编辑器模式，你可以在编辑器中输入代码，并点击下方的『Run』按钮，在线输出。
+3. 点击右上角按钮，可以切换调试模式。
+4. 点击右上角按钮，选择 『Show QR Code』，可以得到一个二维码，使用微信、iOS Playground、Android Playground 可在手机上体验真实效果。
