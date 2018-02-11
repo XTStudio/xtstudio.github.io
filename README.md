@@ -117,12 +117,47 @@ class HelloViewController extends UI.ViewController {
 		super.viewDidLoad()
 		const redView = new UI.View
         redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.backgroundColor = UI.Color.redColor
 		this.view.addSubview(redView)
 	}
 
 }
 ```
 
-现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/RedView.ts)这段代码，一个红色的方块出现在屏幕左上角。
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/RedView.ts)这段代码，一个红色的方块将出现在屏幕左上角。
 
 ## 布局
+
+### frame
+
+或许你已经留意到了，上一段代码中，我们设置了 ```redView.frame = UI.RectMake(0, 0, 44, 44)```，你可以理解为这个 View 位于左上角 x = 0, y = 0 这个位置上，它的 width = 44，height = 44。
+
+```frame``` 是```UI.View```的成员变量，它描述这个 View 所在的位置和大小。
+
+### viewWillLayoutSubviews
+
+```viewWillLayoutSubviews``` 是 ```UI.ViewController``` 的成员方法，每次 ```UI.ViewController::view``` 布局变化时，都会被触发，你可以在这个方法中改变子 View 的 frame，达到响应式布局的目的。使用以下代码，修改 ```redView.frame```，使其与屏幕等宽，```this.view.bounds```反映的是底层 View 的可视区域大小。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+    redView = new UI.View
+
+	viewDidLoad() {
+		super.viewDidLoad()
+        this.redView.frame = UI.RectMake(0, 0, 44, 44)
+		this.redView.backgroundColor = UI.Color.redColor
+		this.view.addSubview(this.redView)
+    }
+
+	viewWillLayoutSubviews() {
+		super.viewWillLayoutSubviews()
+		this.redView.frame = UI.RectMake(0, 0, this.view.bounds.width, 44)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/RedViewEqualsWidth.ts)这段代码。
+
+** 再次说明，在 XT 中，没有像素、em 等单位存在，所有单位都是 Pt。 **
