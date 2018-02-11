@@ -17,7 +17,7 @@ class AppDelegate extends UI.ApplicationDelegate {
 
 	applicationDidFinishLaunchingWithOptions() {
 		this.window = new UI.Window()
-		this.window.rootViewController = new UI.NavigationController(new HelloViewController())
+		this.window.rootViewController = new HelloViewController()
 		this.window.makeKeyAndVisible()
 	}
 

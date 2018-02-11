@@ -51,7 +51,7 @@ class AppDelegate extends UI.ApplicationDelegate {
 
 	applicationDidFinishLaunchingWithOptions() {
 		this.window = new UI.Window()
-		this.window.rootViewController = new UI.NavigationController(new HelloViewController())
+		this.window.rootViewController = new HelloViewController()
 		this.window.makeKeyAndVisible()
 	}
 
@@ -408,3 +408,65 @@ class HelloViewController extends UI.ViewController {
 ```
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/SpringAnimation.ts)这段代码。
+
+## 路由
+
+### 推入与弹出
+
+现在，你学会了单个场景的布局、样式设置、触摸响应以及动画设置。
+
+那么，一个真正的应用，就是由单个页面构成的吗？显然不是，一个真正的应用肯定是由一连串的场景所构成的，下面，我们就来学习路由。
+
+首先，我们回到最开始的例子，将 ```UI.Window``` 中的 rootViewController 替换成 ```UI.NavigationController```。
+
+并且，我们的目标是要在点击红色 View 的时候，推入一个新的场景。在点击新场景的灰色 View 时，弹出这个场景。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.onTap = () => {
+			if (this.navigationController) {
+				this.navigationController.pushViewController(new SecondViewController())
+			}
+		}
+		this.view.addSubview(redView)
+	}
+
+}
+
+class SecondViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const yellowView = new UI.View
+		yellowView.backgroundColor = UI.Color.grayColor
+        yellowView.frame = UI.RectMake(0, 0, 44, 44)
+		yellowView.onTap = () => {
+			if (this.navigationController) {
+				this.navigationController.popViewController()
+			}
+		}
+		this.view.addSubview(yellowView)
+	}
+
+}
+
+class AppDelegate extends UI.ApplicationDelegate {
+
+	applicationDidFinishLaunchingWithOptions() {
+		this.window = new UI.Window()
+		this.window.rootViewController = new UI.NavigationController(new HelloViewController())
+		this.window.makeKeyAndVisible()
+	}
+
+}
+
+const application = new UI.Application(undefined, new AppDelegate())
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/NavigationController.ts)这段代码。
