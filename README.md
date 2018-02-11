@@ -492,3 +492,9 @@ class HelloViewController extends UI.ViewController {
 ```
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/NavigationControllerWithBar.ts)这段代码。
+
+## Explorer
+
+你已经完成了初级的教程，如果你觉得上面的例子太简单，不妨看看 XT Explorer（代码经过编译，不可编辑，源码[点此](https://github.com/XTStudio/XT/tree/master/src/Sample)查看）。
+
+在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/Sample.ts) XT Explorer。
