@@ -240,7 +240,7 @@ shadowRadius: number;
 
 ## 触摸
 
-在 XT 中，所有的 ```UI.View``` 以及它的子类，都是可触摸的，```userInteractionEnabled``` 属性为 ```true``` 时，View 可以响应触摸。
+在 XT 中，所有的 ```UI.View``` 以及它的子类，都是可触摸的，当 ```userInteractionEnabled``` 属性为 ```true``` 时，View 可以响应触摸。
 
 ### 响应单击事件
 
@@ -264,3 +264,70 @@ class HelloViewController extends UI.ViewController {
 ```
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/OnTap.ts)这段代码。
+
+同样的，为 ```view.onDoubleTap``` 赋值，可响应双击事件，如果单击事件和双击事件同时存在，那么，单击事件会等待双击事件失败后，才会响应。
+
+### 响应长按事件
+
+长按事件比单击事件略为复杂，一个长按事件分为三个阶段，开始（Began）、移动（Changed）、结束（Ended），你必须显式地判断当前阶段，才能执行相关操作。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(120, 120, 66, 66)
+		redView.onLongPress = (state) => {
+			if (state == UI.InteractionState.Began) {
+				redView.backgroundColor = UI.Color.yellowColor
+			}
+            else if (state == UI.InteractionState.Changed) {
+                redView.backgroundColor = UI.Color.greenColor
+            }
+            else if (state == UI.InteractionState.Ended) {
+				redView.backgroundColor = UI.Color.redColor
+            }
+        }
+		this.view.addSubview(redView)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/OnLongPress.ts)这段代码。
+
+### 响应拖动事件
+
+拖动事件与长按事件一致，也是分为三个阶段识别，同时，还包括四个附加回调参数，具体请参阅文档。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(120, 120, 66, 66)
+		redView.onPan = (state, viewLocation, absLocation, velocity, translation) => {
+			if (state == UI.InteractionState.Began) {
+				redView.backgroundColor = UI.Color.yellowColor
+			}
+            else if (state == UI.InteractionState.Changed) {
+                if (translation) {
+                    redView.transform = new UI.TransformMatrix(1.0, 0.0, 0.0, 1.0, translation.x, translation.y)
+                }
+            }
+            else if (state == UI.InteractionState.Ended) {
+				redView.backgroundColor = UI.Color.redColor
+                redView.transform = new UI.TransformMatrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+            }
+        }
+		this.view.addSubview(redView)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/OnPan.ts)这段代码。
