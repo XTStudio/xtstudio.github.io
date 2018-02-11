@@ -409,7 +409,7 @@ class HelloViewController extends UI.ViewController {
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/SpringAnimation.ts)这段代码。
 
-## 路由
+## NavigationController
 
 ### 推入与弹出
 
@@ -470,3 +470,25 @@ const application = new UI.Application(undefined, new AppDelegate())
 ```
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/NavigationController.ts)这段代码。
+
+### 显示导航栏
+
+只是推入与弹出，还不够，一个正常的页面，还应该在顶部有一个导航栏。
+
+在 ```UI.ViewController``` 中调用 ```showNavigationBar``` 显示导航栏。设置 ```UI.ViewController::title```，可以设置导航栏标题。使用 ```this.navigationBar.xxx`` 可以配置导航栏样式（导航栏也是一个普通的 ```UI.View```）。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.title = "Hello"
+		this.navigationBar.backgroundColor = new UI.Color(0xe2 / 0xff, 0xe2 / 0xff, 0xe2 / 0xff)
+		this.showNavigationBar()
+		//...
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/NavigationControllerWithBar.ts)这段代码。
