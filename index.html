@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>./</title>
+  <title>XT Studio</title>
   <link rel="stylesheet" href="https://unpkg.com/docute@3/dist/docute.css">
 </head>
 
@@ -16,13 +16,20 @@
     docute.init({
       url: '.',
       nav: [
-        { title: "学习", path: '/' },
+        { title: "Learn", path: '/' },
         { title: "UIKit", path: '/UIKit' },
         { title: "Foundation", path: '/Foundation' },
         {
           title: "Tools", type: 'dropdown', items: [
             { title: "工程生成器", path: '/create-xt-app' },
             { title: "Playground", path: '/Playground' },
+          ]
+        },
+        {
+          title: "API Reference", type: 'dropdown', items: [
+            { title: "XT", path: '/API/XT' },
+            { title: "UIKit", path: '/API/UIKit' },
+            { title: "Foundation", path: '/API/Foundation' },
           ]
         },
       ],

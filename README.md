@@ -498,3 +498,7 @@ class HelloViewController extends UI.ViewController {
 你已经完成了初级的教程，如果你觉得上面的例子太简单，不妨看看 XT Explorer（代码经过编译，不可编辑，源码[点此](https://github.com/XTStudio/XT/tree/master/src/Sample)查看）。
 
 在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/Sample.ts) XT Explorer。
+
+## 继续下一步
+
+接下来，你将学习 [UIKit](/UIKit) 各个组件的使用，以及 [Foundation](/Foundation) 框架的使用。
