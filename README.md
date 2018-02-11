@@ -161,3 +161,106 @@ class HelloViewController extends UI.ViewController {
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/RedViewEqualsWidth.ts)这段代码。
 
 ** 再次说明，在 XT 中，没有像素、em 等单位存在，所有单位都是 Pt。 **
+
+### layoutSubviews
+
+一个事实是，如果完全在 ```viewWillLayoutSubviews``` 中进行所有层级的 ```frame``` 修改，会让代码混乱不堪。必要时，你应该创建 ```UI.View``` 子类。
+
+```layoutSubviews``` 是 ```UI.View``` 的成员方法，它会在本级 View 布局变化时被触发。
+
+在以下例子中，我们在红色 View 中添加一个左间距为 20，右间距为 20 的黄色 View。
+
+```javascript
+class RedView extends UI.View {
+
+	yellowView = new UI.View
+
+	constructor() {
+		super()
+		this.backgroundColor = UI.Color.redColor
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.addSubview(this.yellowView)
+	}
+
+	layoutSubviews() {
+		super.layoutSubviews()
+		this.yellowView.frame = UI.RectMake(20, 0, this.bounds.width - 40, this.bounds.height)
+	}
+
+}
+
+class HelloViewController extends UI.ViewController {
+
+    redView = new RedView
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.view.addSubview(this.redView)
+    }
+
+	viewWillLayoutSubviews() {
+		super.viewWillLayoutSubviews()
+		this.redView.frame = UI.RectMake(0, 0, this.view.bounds.width, 44)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/RedViewWithYellowView.ts)这段代码。
+
+### AutoLayout
+
+另外一种更高级的布局方式是 AutoLayout，关于 AutoLayout 的使用，请参阅文档。
+
+## 样式
+
+在 XT 中，要为一个 View 设置样式，实际上就是修改这个 View 的属性，在上述的例子中，你已经留意到我们设置背景色所使用的方法。
+
+```javascript
+redView.backgroundColor = UI.Color.redColor
+```
+
+同样的，我们可以为 ```UI.View``` 设置以下这些样式，这些样式的定义请参阅文档。
+
+```javascript
+clipsToBounds: boolean;
+backgroundColor: Color;
+alpha: number;
+opaque: boolean;
+hidden: boolean;
+tintColor: Color
+cornerRadius: number;
+borderWidth: number;
+borderColor: Color;
+shadowColor: Color;
+shadowOpacity: number;
+shadowOffset: Size;
+shadowRadius: number;
+```
+
+## 触摸
+
+在 XT 中，所有的 ```UI.View``` 以及它的子类，都是可触摸的，```userInteractionEnabled``` 属性为 ```true``` 时，View 可以响应触摸。
+
+### 响应单击事件
+
+只需为 ```view.onTap``` 赋值，即可响应单击事件，在以下例子中，单击红色 View 后，红色 View 将变为黄色。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.onTap = () => {
+			redView.backgroundColor = UI.Color.yellowColor
+		}
+		this.view.addSubview(redView)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/OnTap.ts)这段代码。
