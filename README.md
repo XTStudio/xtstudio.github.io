@@ -331,3 +331,80 @@ class HelloViewController extends UI.ViewController {
 ```
 
 现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/OnPan.ts)这段代码。
+
+## 动画
+
+在 XT 中，所有的 View 都可以执行动画，以下的属性是可以响应动画的。
+
+* frame
+* center
+* transform
+* backgroundColor
+* alpha
+* cornerRadius
+* borderWidth
+* borderColor
+* shadowColor
+* shadowOpacity
+* shadowOffset
+* shadowRadius
+
+动画分为两种，线性动画以及弹性动画，使用以下方式唤起界面动画。
+
+### 线性动画
+
+调用 ```UI.View.animationWithDuration``` 方法，第一个参数是动画时长，第二个参数是动画执行 Block，只需要在其中声明动画属性终点即可，第三个参数是动画结束 Block，它会在动画播放结束后被调用。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.onTap = () => {
+			UI.View.animationWithDuration(0.3, () => {
+				redView.frame = UI.RectMake(100, 100, 88, 88)
+				redView.alpha = 0.5
+				redView.backgroundColor = UI.Color.purpleColor
+			}, () => {
+				console.log("Done")
+			})
+		}
+		this.view.addSubview(redView)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/DurationAnimation.ts)这段代码。
+
+### 弹性动画
+
+弹性动画调用方式与线性动画一致，唯一不同点在于传参，第一个参数是弹性系数，第二个参数是起始速度。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		const redView = new UI.View
+		redView.backgroundColor = UI.Color.redColor
+        redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.onTap = () => {
+			UI.View.animationWithBouncinessAndSpeed(10.0, 24.0, () => {
+				redView.frame = UI.RectMake(100, 100, 88, 88)
+				redView.alpha = 0.5
+				redView.backgroundColor = UI.Color.purpleColor
+			}, () => {
+				console.log("Done")
+			})
+		}
+		this.view.addSubview(redView)
+	}
+
+}
+```
+
+现在，就在 Playground 中[运行](http://xt-studio.com/XT-Playground-Web/#/samples/SpringAnimation.ts)这段代码。
