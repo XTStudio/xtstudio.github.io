@@ -8,8 +8,27 @@ XT 致力于使开发者能使用 TypeScript 语言，基于同一套代码构�
 
 在集成 XT-Runtime 后，你可以使用 XT 所提供的 API 开发移动、PC应用。
 
-XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它们的区别，请查看[对比其它框架]()。
+，在 Android 平台上是使用 android.view.* 进行的，在 Web 平台上是使用 SVG/WebKit 进行的。
+
+XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它们的区别，请查看[对比其它框架](/Compare)。
 
+## 运行时
+
+### iOS
+
+* 在界面上，XT 是使用 UIKit/CoreGraphics 进行渲染的，也就是原生界面。
+* 在 JavaScript 上，XT 使用 JavaScriptCore 运行时，兼容 iOS 8.0+ 机器，支持所有 ES6 语法（部分库需要 Polyfill）。
+
+### Android
+
+* 在界面上，XT 是使用 android.view.* 包进行渲染的，也就是原生界面。
+* 在 JavaScript 上，XT 使用 J2V8 运行时，也就是 V8 引擎，该 V8 引擎支持所有 ES6 语法（不需要任何 Polyfill）。
+
+### Web
+
+* 在界面上，XT 基于 SVG 进行渲染。
+* 在 JavaScript 上，XT 依赖浏览器、WebView 的运行环境。
+
 ## 起步
 
 > 我们假定你已经了解关于 TypeScript / JavaScript 的中级知识。如果你是一个 TypeScript 新手，我们建议你先学习好基础知识再来看这篇指南。
@@ -106,7 +125,7 @@ const application = new UI.Application(undefined, new AppDelegate())
 
 ## 从 View 开始
 
-一行胜千言，让我们现在就添加一个 View 到视图中。
+行胜于言，让我们现在就添加一个 View 到视图中。
 
 我们定义这个 View 是红色的，并且位于屏幕左上角，其大小为 44 * 44 （在 XT 中，所有大小单位都是 Point）。
 

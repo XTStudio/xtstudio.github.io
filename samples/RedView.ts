@@ -3,7 +3,8 @@ class HelloViewController extends UI.ViewController {
 	viewDidLoad() {
 		super.viewDidLoad()
 		const redView = new UI.View
-        redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.frame = UI.RectMake(0, 0, 44, 44)
+		redView.backgroundColor = UI.Color.redColor
 		this.view.addSubview(redView)
 	}
 
