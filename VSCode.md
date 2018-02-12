@@ -72,6 +72,10 @@ yo 是必须安装的。
 
 接着点按 VSCode Debugger Bar 中的刷新按钮（快捷键为 Shift + Command + F5），应用将被重新构建，你无须手动刷新 Playground，Playground 会在构建完成后，自动刷新。
 
+## Log
+
+当目标应用执行 ```console.log("xxx")``` 命令时，日志会发送到 VSCode ```DEBUG CONSOLE``` 中。
+
 ## 设置断点
 
 若要设置断点，只需在对应代码行的行号左侧，单击即可。当代码运行到断点时，程序会暂停，等候你的『Continue』或是『Step』指令。
