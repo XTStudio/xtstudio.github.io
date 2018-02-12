@@ -6,9 +6,7 @@
 
 XT 致力于使开发者能使用 TypeScript 语言，基于同一套代码构建 iOS / Android 以及 Web 应用。
 
-在集成 XT-Runtime 后，你可以使用 XT 所提供的 API 开发移动、PC应用。
-
-，在 Android 平台上是使用 android.view.* 进行的，在 Web 平台上是使用 SVG/WebKit 进行的。
+在集成 XT 运行时后，你可以使用 XT 所提供的 API 开发移动、PC应用。
 
 XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它们的区别，请查看[对比其它框架](/Compare)。
 
@@ -17,12 +15,12 @@ XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它�
 ### iOS
 
 * 在界面上，XT 是使用 UIKit/CoreGraphics 进行渲染的，也就是原生界面。
-* 在 JavaScript 上，XT 使用 JavaScriptCore 运行时，兼容 iOS 8.0+ 机器，支持所有 ES6 语法（部分库需要 Polyfill）。
+* 在 JavaScript 上，XT 使用 JavaScriptCore 库，兼容 iOS 8.0+ 机器，支持所有 ES6 语法（部分库需要 Polyfill）。
 
 ### Android
 
 * 在界面上，XT 是使用 android.view.* 包进行渲染的，也就是原生界面。
-* 在 JavaScript 上，XT 使用 J2V8 运行时，也就是 V8 引擎，该 V8 引擎支持所有 ES6 语法（不需要任何 Polyfill）。
+* 在 JavaScript 上，XT 使用 J2V8 库，也就是 V8 引擎，该 V8 引擎支持所有 ES6 语法（不需要任何 Polyfill）。
 
 ### Web
 
@@ -43,7 +41,7 @@ XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它�
 
 在 Playground 编辑器中输入一些代码，点击 『Run』，接着，一个 iPhone / Android 模拟器便会呈现在你面前，你所输入的代码会在一个 iframe 中运行。
 
-想要移动设备上预览真实的渲染结果，你需要进入[Tools -> Playground](/Playground)，使用 Xcode 或 Android Studio 将对应的 Playground 构建在手机中。
+想要在移动设备上预览真实的渲染结果，你需要进入[Tools -> Playground](/Playground)，使用 Xcode 或 Android Studio 将对应的 Playground 构建在手机中。
 
 ## 启动应用
 
@@ -494,7 +492,7 @@ const application = new UI.Application(undefined, new AppDelegate())
 
 只是推入与弹出，还不够，一个正常的页面，还应该在顶部有一个导航栏。
 
-在 ```UI.ViewController``` 中调用 ```showNavigationBar``` 显示导航栏。设置 ```UI.ViewController::title```，可以设置导航栏标题。使用 ```this.navigationBar.xxx`` 可以配置导航栏样式（导航栏也是一个普通的 ```UI.View```）。
+在 ```UI.ViewController``` 中调用 ```showNavigationBar``` 显示导航栏。设置 ```UI.ViewController::title```，可以设置导航栏标题。使用 ```this.navigationBar.xxx``` 可以配置导航栏样式（导航栏也是一个普通的 ```UI.View```）。
 
 ```javascript
 class HelloViewController extends UI.ViewController {
@@ -520,4 +518,8 @@ class HelloViewController extends UI.ViewController {
 
 ## 继续下一步
 
-接下来，你将学习 [UIKit](/UIKit) 各个组件的使用，以及 [Foundation](/Foundation) 框架的使用。
+接下来，你将学习到更多知识。
+
+* 你将使用 [VSCode](/VSCode) 替代 Playground 进行开发、调试以及发布。
+* 你将学习 [UIKit](/UIKit) 各个组件的使用，用以构建完整的用户界面。
+* 你将学习 [Foundation](/Foundation) 框架的使用，用以实现网络、存储、二进制处理等功能。

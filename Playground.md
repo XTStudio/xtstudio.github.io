@@ -25,6 +25,4 @@
 1. 如果你已经在本机开启 VSCode 并已启动调试模式，那么 Playground 将自动呈现你当前的工程输出。
 2. 否则，Playground 将进入编辑器模式，你可以在编辑器中输入代码，并点击下方的『Run』按钮，在线输出。
 3. 点击右上角按钮，可以切换调试模式。
-4. 点击右上角按钮，选择 『Show QR Code』，可以得到一个二维码，使用任何二维码扫描软件（除了** 微信 **）、iOS Playground、Android Playground 可在手机上体验真实效果。
-
-** 不要问我为什么不能用微信，微信不知道抽什么风，封禁了 xt-studio.com 域名。 **
+4. 点击右上角按钮，选择 『Show QR Code』，可以得到一个二维码，使用微信、iOS Playground、Android Playground 可在手机上体验真实效果。
