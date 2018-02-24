@@ -1,6 +1,6 @@
 # UIKit
 
-> XT UIKit 是以 iOS UIKit 为蓝本构建的，你可以通过学习相关的 iOS 教程获得更多知识。
+> XT UIKit 是以 iOS UIKit 为蓝本编写的，你可以通过学习相关的 iOS 教程获得更多知识。
 
 UIKit 是 XT 的核心库，你所看到的图形界面均由 UIKit 构建。
 
@@ -446,3 +446,268 @@ class HelloViewController extends UI.ViewController {
 ```
 
 [试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_3.ts)
+
+#### 对齐
+
+使用 ```C:grayView.left(yellowView.left)``` 可以使灰色与黄色 View 左侧对齐。
+
+同样的，可以换成 ```right``` ```top``` ```bottom``` ```centerX``` ```centerY``` ```width``` ```height``` 这些属性。
+
+#### 比例
+
+在 VisualFormat 中可以在括号中使用比例，下面例子演示了，黄色 View 的高度始终是其宽度的 1.5 倍。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	yellowView = new UI.View()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.view.addSubview(this.yellowView)
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:|-15-[yellowView(50%)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:|-100-[yellowView(yellowView.width*1.5)]", this
+		))
+		this.view.layoutIfNeeded()
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_4.ts)
+
+### 触摸
+
+关于触摸，我们已经在初级教程中[提及](/?id=触摸)。这里，我们希望告诉你更多的细节。
+
+#### hitTest
+
+在 UIKit 中，会有一个根节点，这个根节点一般是 ```UI.Window```，当你的手指在屏幕上操作时，根节点会收到回调。
+
+当 ```touchStart``` 时，UIKit 会从根节点开始往下递归地查找目标元素，元素应该符合以下条件，才能成功响应对象。
+
+1. ```userInteractionEnabled == true```
+2. ```alpha > 0```
+3. ```hidden == false```
+
+这个过程会在 ```UI.View``` 的 ```hitTest``` 方法中进行，但目前你暂不能通过重写这个方法修改它的行为。
+
+#### GestureReconizer
+
+在 ```UI.View``` 背后，响应触摸的是```GestureReconizer```，我们已经封装好了 ```TapGestureReconizer``` / ```LongPressGestureReconizer``` / ```PanGestureReconizer``` 三个识别器，但我们并没有对开发者直接开发这些类的访问。你只需要直接使用 ```UI.View``` 中在的 onTap / onDoubleTap / onLongPress / onPan 即可。
+
+#### 手势冲突
+
+当 View 中同时存在 onTap 和 onDoubleTap 回调时，onTap 的调用会延时执行。这是因为存在手势冲突，我们需要等待双击事件失败后，才能触发单击事件。
+
+## 组件
+
+UIKit 为开发者封装了各种常用的组件，借助组件，你不需要从零开始构建一个应用，所有的组件都继承 ```UI.View```。
+
+### 按钮 Button
+
+一个按钮，它的内容可以是一行文本，或者是一个图片，也可以是两者混合（垂直或水平排列）。
+
+按钮是可触摸的视图，```UI.Button``` 会根据手指的状态，给予不同的回调。
+
+```javascript
+onTouchDown: () => void           // 手指按下时回调
+onTouchDragInside: () => void     // 手指拖动时回调（仍然在按钮范围内）
+onTouchDragOutside: () => void    // 手指拖动时回调（不在按钮范围内）
+onTouchDragEnter: () => void      // 手指进入按钮范围时回调
+onTouchDragExit: () => void       // 手指超出按钮范围时回调
+onTouchUpInside: () => void       // 手指抬起时回调（在按钮范围内）
+onTouchUpOutside: () => void      // 手指抬起时回调（在按钮范围外）
+onTouchCancel: () => void         // 触摸被取消时回调（可能被另外一个 View 夺走了控制权）
+onHighlighted: (highlighted: boolean) => void // 按钮高亮变化时回调
+onHover: () => void               // 鼠标经过时回调（仅 PC 浏览器有效）
+```
+
+#### 文本按钮
+
+以下例子演示了一个文本按钮的使用
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooButton = new UI.Button
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		// ...
+		this.fooButton.title = "Foo"
+		this.fooButton.onTouchUpInside = () => {
+			this.fooButton.title = "Bar"
+		}
+		//...
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_4_0.ts)
+
+#### 图像按钮
+
+以下例子演示了一个图像按钮的使用（这里使用网络图片作演示，使用本地图片的方法请参照 ImageView 一节）
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooButton = new UI.Button
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		// ...
+		UI.Image.fromURL("https://cdn.jsdelivr.net/npm/xt-studio@0.0.2/src/Sample/assets/voice%403x.png", (image) => {
+			this.fooButton.image = image.imageWithImageRenderingMode(UI.ImageRenderingMode.Template)
+		})
+		this.fooButton.onTouchUpInside = () => {
+			new UI.Alert("You touch me.").show()
+		}
+		//...
+	}
+
+}
+```
+
+* 请尝试把 ```.imageWithImageRenderingMode(UI.ImageRenderingMode.Template)``` 去掉，看看会发生什么？
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_4_1.ts)
+
+#### 图文混排
+
+你可以同时设置 ```image``` 和 ```text``` 属性，即可实现图文混排。
+
+修改 ```vertical``` 可以设置排版方式为垂直，修改 ```inset``` 数值可以设置图文间距。
+
+### 文本框 Label
+
+使用 ```UI.Label``` 可以显示单行或多行文本，文本将垂直居中显示。
+
+#### 单行文本
+
+以下例子演示了，如何显示单行文本，并设置其字体、颜色。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooLabel = new UI.Label
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.fooLabel.font = UI.Font.boldSystemFontOfSize(17)
+		this.fooLabel.textColor = UI.Color.purpleColor
+		this.fooLabel.text = "Hello, World!"
+		this.fooLabel.numberOfLines = 1
+		// ...
+	}
+
+}
+```
+
+* font 属性接受一个 ```UI.Font``` 实例，具体请参阅文档。
+* 在例子中，文本是居中显示的，因为我们给予了它一个 centerX centerY 的布局约束。
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_5_0.ts)
+
+#### 多行文本
+
+当文本框拥有固定宽度，并且 numberOfLines > 1 时（0表示无限行），文本会自动换行，以下例子演示，如何显示多行文本。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooLabel = new UI.Label
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.fooLabel.font = UI.Font.systemFontOfSize(16)
+		this.fooLabel.textColor = UI.Color.blackColor
+		this.fooLabel.text = `欢聚时代成立于2005年4月，国内首家富集通讯业务运营商，致力于打造最酷的网络直播公司，为全球用户提供团队语音服务，是当前国内领先的互联网语音视频平台提供商之一。欢聚时代怀揣着年轻的激情，运用创新的技术，缔造覆盖全球的富集通讯服务。`
+		this.fooLabel.numberOfLines = 0
+		// ...
+	}
+
+}
+```
+
+* 在例子中，文本框宽度限制为父级视图的一半。
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_5_1.ts)
+
+### 图片框 ImageView
+
+使用 ```UI.ImageView``` 显示本地、网络图片，要显示图片，你必须获得一个 ```UI.Image``` 实例。
+
+#### 本地图片
+
+要加载本地图片，你需要使用 VSCode 开发应用，配置 VSCode 环境，请参阅[使用 VSCode 开发](/VSCode)。
+
+以下例子演示了，如何加载一张本地图片（由于浏览器限制，Playground 无法在线预览本例子）。
+
+在下面的例子中，你可以把 ```require('./success@2x.png')``` 当作 ```UI.Image``` 实例使用。
+
+```javascript
+const view = new UI.ImageView()
+view.frame = UI.RectMake(0, 66, 78, 78)
+view.image = require('./success@2x.png')
+```
+
+* 你需要把 ```success@2x.png``` 放置在合适的目录，require 图片路径相对于当前 ts 文件。
+* 你需要显式指定文件路径，不能使用任何变量，如 ```require(fooString + "xxx.png")```。
+* 如果是本地图片，在添加约束时，无须显式指定 ```UI.ImageView``` 的宽高（当然，你指定了，也没什么坏处）。
+
+#### 网络图片
+
+以下例子演示了，如何加载一张网络图片。
+
+```javascript
+const fooImageView = new UI.ImageView()
+fooImageView.frame = UI.RectMake(44, 44, 100, 100)
+UI.Image.fromURL("http://www.httpbin.org/image/png", (image) => {
+    fooImageView.image = image
+})
+```
+
+* 你必须显式声明 ```UI.ImageView``` 的宽高。
+* 如果网络图片带有 @2x 后缀，则返回的 ```UI.Image``` 对象 scale 则为 2，以此类推。
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_6_0.ts)
+
+### 滚动视图 ScrollView
+
+当屏幕内容超出一屏的时候，用户需要滚动视图，才能查看下方或者右方的内容，我们把这种视图，称为 ```ScrollView```。
+
+```UI.ScrollView``` 也是一个 ```UI.View```，不同的是，在它之上，封装了一个 Pan 的手势，用于响应拖动事件。
+
+那么，如何表达我们在 ScrollView 里面的内容呢？如何告知 ScrollView，我们的内容宽高呢？
+
+在下面的例子，黄色与红色两个 View，它们的宽高都是 300 * 300，它们所在的位置分别是 (0,0), (0, 600)。对于一般的手机来说，这绝对是超出一屏限制的，我们也可以就此看出 ScrollView 的作用。
+
+1. 添加子视图到 ScrollView 中
+
+```javascript
+const yellowView = new UI.View
+yellowView.frame = UI.RectMake(0, 0, 300, 300)
+yellowView.backgroundColor = UI.Color.yellowColor
+this.scrollView.addSubview(yellowView)
+const redView = new UI.View
+redView.frame = UI.RectMake(0, 600, 300, 300)
+redView.backgroundColor = UI.Color.redColor
+this.scrollView.addSubview(redView)
+```
+
+2. 设置 contentSize
+
+通过上面的 View 信息，我们可以得知，最大容量高度是 900，我们不需要横向滑动，可以忽略内容宽度。使用以下方法设置 ScrollView 的内容大小。
+
+```javascript
+this.scrollView.contentSize = UI.SizeMake(0, 900)
+```
+
+一个简单的 ScrollView 已经完成了，现在[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_7_0.ts)效果吧。
