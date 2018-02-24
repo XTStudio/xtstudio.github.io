@@ -683,11 +683,11 @@ UI.Image.fromURL("http://www.httpbin.org/image/png", (image) => {
 
 当屏幕内容超出一屏的时候，用户需要滚动视图，才能查看下方或者右方的内容，我们把这种视图，称为 ```ScrollView```。
 
-```UI.ScrollView``` 也是一个 ```UI.View```，不同的是，在它之上，封装了一个 Pan 的手势，用于响应拖动事件。
+```UI.ScrollView``` 也是一个 ```UI.View```，不同的是，在它之上，封装了一个 Pan 的手势识别器，用于响应拖动事件。
 
-那么，如何表达我们在 ScrollView 里面的内容呢？如何告知 ScrollView，我们的内容宽高呢？
+那么，如何表达我们在 ScrollView 里面的内容呢？又是如何告知 ScrollView，我们的内容宽高呢？
 
-在下面的例子，黄色与红色两个 View，它们的宽高都是 300 * 300，它们所在的位置分别是 (0,0), (0, 600)。对于一般的手机来说，这绝对是超出一屏限制的，我们也可以就此看出 ScrollView 的作用。
+在下面的例子，黄色与红色两个 View，它们的宽高都是 300 * 300，它们所在的位置分别是 (0,0), (0, 600)，可见，红色 View 已经超出屏幕了。
 
 1. 添加子视图到 ScrollView 中
 
@@ -711,3 +711,13 @@ this.scrollView.contentSize = UI.SizeMake(0, 900)
 ```
 
 一个简单的 ScrollView 已经完成了，现在[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_7_0.ts)效果吧。
+
+设置 ScrollView 的属性，还可以实现分页滚动、横向滚动、隐藏滚动条等功能，具体请参阅文档。
+
+### 列表视图 ListView
+
+```UI.ListView``` 是提供垂直列表功能的组件，继承于 ```UI.ScrollView```，功能上等同于 ```UITableView(iOS)``` ```ListView(Android)```。
+
+```UI.ListView``` 所管理的 ```UI.ListCell``` 会被复用，当一个 Cell 滚出屏幕可见范围时，它会被重复利用，因此，ListView 拥有最佳的内存管理机制，即使存在十万个 Cell ，也不存在太大性能问题。
+
+
