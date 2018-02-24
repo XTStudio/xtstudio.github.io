@@ -293,3 +293,156 @@ new UI.TransformMatrix().postScale(1.5, 2.5)
 ```javascript
 new UI.TransformMatrix().postTranslate(20.0, 20.0)
 ```
+
+### AutoLayout
+
+AutoLayout 是一种全新的布局语言，它不同于任何 Web Android 以及传统 iOS 布局语言。在 XT 中，我们只支持使用纯代码的形式，使用 AutoLayout。
+
+#### VisualFormat
+
+VisualFormat 是 AutoLayout 的核心语言，借助 VisualFormat，你可以轻松地完成整个界面的布局描述。
+
+我们将在下面的例子中，一步一步地学习使用 VisualFormat 布局界面。
+
+#### Hello, World!
+
+这是一个最简单的例子 ```H:|-0-[fooView]-0-|```，其中，```H``` 代表这是一个横向的布局描述，```|``` 代表父级视图，```[fooView]``` 代表需要执行布局的这个视图，fooView 是这个视图的名称，完整地的意思是，在横向上，fooView 的宽度等于父视图的宽度。
+
+同样的，```V:|-0-[fooView]-0-|``` 代表在纵向上，fooView 的高度等于父视图的高度。
+
+我们使用以下例子，演示如何将黄色 View 铺满整个屏幕。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	yellowView = new UI.View()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.view.addSubview(this.yellowView)
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:|-0-[yellowView]-0-|", {yellowView: this.yellowView}
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:|-0-[yellowView]-0-|", {yellowView: this.yellowView}
+		))
+		this.view.layoutIfNeeded()
+	}
+
+}
+```
+
+* ```addConstraints``` 是在父视图上执行的。
+* ```addConstraints``` 方法，必须在 addSubview 后再执行。
+* 最后，调用 ```layoutIfNeeded``` 方法，更新布局。
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_0.ts)
+
+#### 两个平行视图的布局
+
+如果某 View 下，同时存在两个子 View，要如何布局它们呢？
+
+使用类似这样的 VisualFormat ```H:|-0-[grayView(100)]-0-[yellowView]-0-|```
+
+它的意思是，在横向方向上，grayView 位于左侧，占据 100 的宽度，剩余宽度由 yellowView 占据。
+
+完整的例子如下，灰色 View 在左侧，宽度为 100，灰色和黄色 View 与父视图等高。我们使用 this 替代第二个参数，你可以仔细摸索原因。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	grayView = new UI.View()
+	yellowView = new UI.View()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.grayView.backgroundColor = UI.Color.grayColor
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.view.addSubview(this.grayView)
+		this.view.addSubview(this.yellowView)
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:|-0-[grayView(100)]-0-[yellowView]-0-|", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:|-0-[yellowView,grayView]-0-|", this
+		))
+		this.view.layoutIfNeeded()
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_1.ts)
+
+#### 使用百分比
+
+你可以简单地将数字替换成百分比，比如 ```H:|-0-[grayView(50%)]-0-[yellowView(50%)]-0-|```，这样，灰色与黄色 View 将各占一半宽度。
+
+#### 绝对居中
+
+```"C:yellowView.centerX(_)"```，代表 yellowView 横向居中， ```C``` 开头的描述符表示这是一个居中描述，```(_)``` 表示居中于父视图。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	yellowView = new UI.View()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.view.addSubview(this.yellowView)
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:[yellowView(50%)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:yellowView.centerX(_)", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:|-0-[yellowView]-0-|", this
+		))
+		this.view.layoutIfNeeded()
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_2.ts)
+
+#### 相对居中
+
+可以把上面例子中的 ```(_)``` 替换为具体的 View，可使两个 View 相对居中。
+
+下面例子演示了黄色与灰色 View 在水平方向上，相对居中。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	yellowView = new UI.View()
+	grayView = new UI.View()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.yellowView.backgroundColor = UI.Color.yellowColor
+		this.grayView.backgroundColor = UI.Color.grayColor
+		this.view.addSubview(this.yellowView)
+		this.view.addSubview(this.grayView)
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:[yellowView(50%),grayView(100)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:|-100-[yellowView(44)]-44-[grayView(22)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:yellowView.centerX(_)", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:grayView.centerX(yellowView)", this
+		))
+		this.view.layoutIfNeeded()
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_3_3.ts)
