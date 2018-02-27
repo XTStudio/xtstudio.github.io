@@ -689,7 +689,7 @@ UI.Image.fromURL("http://www.httpbin.org/image/png", (image) => {
 
 在下面的例子，黄色与红色两个 View，它们的宽高都是 300 * 300，它们所在的位置分别是 (0,0), (0, 600)，可见，红色 View 已经超出屏幕了。
 
-1. 添加子视图到 ScrollView 中
+#### 添加子视图到 ScrollView 中
 
 ```javascript
 const yellowView = new UI.View
@@ -702,9 +702,9 @@ redView.backgroundColor = UI.Color.redColor
 this.scrollView.addSubview(redView)
 ```
 
-2. 设置 contentSize
+#### 设置 contentSize
 
-通过上面的 View 信息，我们可以得知，最大容量高度是 900，我们不需要横向滑动，可以忽略内容宽度。使用以下方法设置 ScrollView 的内容大小。
+通过上面的 View 信息，我们可以得知，最大高度是 900，我们不需要横向滑动，可以忽略内容宽度。使用以下方法设置 ScrollView 的内容大小。
 
 ```javascript
 this.scrollView.contentSize = UI.SizeMake(0, 900)
@@ -718,6 +718,161 @@ this.scrollView.contentSize = UI.SizeMake(0, 900)
 
 ```UI.ListView``` 是提供垂直列表功能的组件，继承于 ```UI.ScrollView```，功能上等同于 ```UITableView(iOS)``` ```ListView(Android)```。
 
-```UI.ListView``` 所管理的 ```UI.ListCell``` 会被复用，当一个 Cell 滚出屏幕可见范围时，它会被重复利用，因此，ListView 拥有最佳的内存管理机制，即使存在十万个 Cell ，也不存在太大性能问题。
+ListView 具有良好的内存管理机制，在 ```UI.ListView``` 管理下的 ```UI.ListCell``` 会被复用，当一个 Cell 滚出屏幕可见范围时，它会被重复利用，即使存在十万个 Cell，也不存在严重的性能问题。
 
+在下面的例子中，我们会展示如何在 ```UI.ListView``` 中呈现一个用户列表，接口数据来自 GitHub [https://api.github.com/users?since=0](https://api.github.com/users?since=0)。
+
+#### 创建一个 ListCell 子类
+
+创建一个 ```UI.ListCell``` 子类，命名为 ```UserCell```。在其中添加 ```UI.ImageView``` 和 ```UI.Label```，分别用于显示用户头像和昵称。
+
+```javascript
+class UserCell extends UI.ListCell {
+
+	iconImageView = new UI.ImageView
+	nicknameLabel = new UI.Label
+
+	constructor() {
+		super()
+		this.iconImageView.cornerRadius = 4
+		this.iconImageView.clipsToBounds = true
+		this.iconImageView.backgroundColor = UI.Color.lightGrayColor
+		this.addSubview(this.iconImageView)
+		this.nicknameLabel.font = UI.Font.systemFontOfSize(15)
+		this.nicknameLabel.text = "#nickname"
+		this.addSubview(this.nicknameLabel)
+		this.setupLayout()
+	}
+
+	setupLayout() {
+		this.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:|-15-[iconImageView(44)]-8-[nicknameLabel]-15-|", this
+		))
+		this.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:[iconImageView(44)]", this
+		))
+		this.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:iconImageView.centerY(_)", this
+		))
+		this.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:[nicknameLabel(44)]", this
+		))
+		this.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:nicknameLabel.centerY(_)", this
+		))
+		this.layoutIfNeeded()
+	}
+
+}
+```
+
+#### 创建 ListView 并注册 ListCell
+
+在 ```ViewController``` 中创建一个 ```UI.ListView``` 实例，将刚刚创建的 ```UserCell``` 注册到 ```this.listView```，并添加至 ```view``` 中。
+
+```javascript
+this.listView.register(UserCell, "Cell", this)
+this.view.addSubview(this.listView)
+this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+    "HV:|-0-[listView]-0-|", this
+)) // Full Screen Layout
+this.view.layoutIfNeeded()
+```
+
+#### 添加一些假数据
+
+我们先添加一些假数据，让大家看到 Cell 展示的样子。
+
+* reuseIdentifier 是上一步我们注册 UserCell 所指定的复用标识。
+* rowHeight 是一个函数，返回该行的高度。
+
+```javascript
+loadData() {
+    this.listView.items = [
+        {
+            reuseIdentifier: "Cell",
+            rowHeight: () => 70
+        },
+        {
+            reuseIdentifier: "Cell",
+            rowHeight: () => 70
+        },
+        {
+            reuseIdentifier: "Cell",
+            rowHeight: () => 70
+        },
+        {
+            reuseIdentifier: "Cell",
+            rowHeight: () => 70
+        }
+    ]
+    this.listView.reloadData()
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_8_0.ts)
+
+#### 加载真实数据
+
+在上面的例子中，我们已经可以看到由假数据渲染出来的结果了，现在，稍加修改 loadData 方法，把真实的数据加载并渲染出来。
+
+我们会用到 ```Foundation``` 框架中的 ```URLSession``` 模块，用于加载远端数据。
+
+```javascript
+loadData() {
+	NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=0", (data) => {
+		if (data) {
+			try {
+				const json: any[] = JSON.parse(data.utf8String())
+				this.listView.items = json.map(it => {
+					return {
+						...it,
+						reuseIdentifier: "Cell",
+						rowHeight: () => 70,
+					}
+				})
+				this.listView.reloadData()
+			} catch (e) {}
+		}
+	}).resume()
+}
+```
+
+我们在 GitHub 上取得的数据，结构如下，目前我们只需要 login 和 avatar_url 字段。
+
+```json
+{
+	"login": "mojombo",
+	"id": 1,
+	"avatar_url": "https://avatars0.githubusercontent.com/u/1?v=4",
+	"gravatar_id": "",
+	"url": "https://api.github.com/users/mojombo",
+	"html_url": "https://github.com/mojombo",
+	"followers_url": "https://api.github.com/users/mojombo/followers",
+	"following_url": "https://api.github.com/users/mojombo/following{/other_user}",
+	"gists_url": "https://api.github.com/users/mojombo/gists{/gist_id}",
+	"starred_url": "https://api.github.com/users/mojombo/starred{/owner}{/repo}",
+	"subscriptions_url": "https://api.github.com/users/mojombo/subscriptions",
+	"organizations_url": "https://api.github.com/users/mojombo/orgs",
+	"repos_url": "https://api.github.com/users/mojombo/repos",
+	"events_url": "https://api.github.com/users/mojombo/events{/privacy}",
+	"received_events_url": "https://api.github.com/users/mojombo/received_events",
+	"type": "User",
+	"site_admin": false
+},
+```
+
+在 ```UserCell``` 类中添加 ```didRender``` 方法，把数据填充到 ImageView 和 Label 中。
+
+```javascript
+didRender() {
+	super.didRender()
+	if (this.currentItem) {
+		this.iconImageView.loadImage(this.currentItem.avatar_url)
+		this.nicknameLabel.text = this.currentItem.login
+	}
+}
+```
+
+嗯，我们要做的事情已经完成了，[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_8_1.ts)效果吧。
 
