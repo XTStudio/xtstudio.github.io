@@ -88,7 +88,7 @@ class HelloViewController extends UI.ViewController {
 
 ### KeyboardAvoidingMode.None
 
-当返回 None 值时，应用不会调整 UI 元素，而是触发 ```UI.ViewController:keyboardWillShow``` ```UI.ViewController:keyboardWillHide``` 方法，你需要自行处理相关 UI 元素变化。
+当返回 None 值时，应用不会调整 UI 元素，转而调用 ```UI.ViewController:keyboardWillShow``` ```UI.ViewController:keyboardWillHide``` 方法，你需要自行处理相关 UI 元素变化。
 
 ### KeyboardAvoidingMode.Pan
 
@@ -111,3 +111,9 @@ class HelloViewController extends UI.ViewController {
 
 * 请勿在 JavaScript 主线程中执行过多计算操作。
 * 可以通过创建 ```NS.Context``` 线程的方式进行密集计算，然后将结果发送回 JavaScript 主线程。
+
+## 图片资源
+
+我们不建议开发者引入尺寸过大的图片资源，```require``` 方式所引用的图片资源，应始终保持最小尺寸（文件大小），我们会在编译时，使用 ```pngquant``` 再次压缩你的图片资源。
+
+对于大尺寸文件，我们建议将其放在服务器上，动态加载。
