@@ -38,7 +38,7 @@ npm 是一个依赖管理工具，用于管理、安装 JavaScript 世界的各�
 
 yo 是必须安装的。
 
-打开命令行，输入 ```npm install -g yo```，稍等片刻，即会安装成功。
+打开命令行，输入 ```npm install -g yo generator-xt```，稍等片刻，即会安装成功。
 
 ## 创建一个工程
 
