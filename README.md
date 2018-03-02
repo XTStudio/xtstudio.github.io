@@ -523,3 +523,4 @@ class HelloViewController extends UI.ViewController {
 * 你将使用 [VSCode](/VSCode) 替代 Playground 进行开发、调试以及发布。
 * 你将学习 [UIKit](/UIKit) 各个组件的使用，用以构建完整的用户界面。
 * 你将学习 [Foundation](/Foundation) 框架的使用，用以实现网络、存储、二进制处理等功能。
+* XT 在某些方面可能与现有技术存在不一致的地方，你可以参阅 [FAQ](/FAQ)。

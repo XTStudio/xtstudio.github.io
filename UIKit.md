@@ -814,7 +814,7 @@ loadData() {
 
 #### 加载真实数据
 
-在上面的例子中，我们已经可以看到由假数据渲染出来的结果了，现在，稍加修改 loadData 方法，把真实的数据加载并渲染出来。
+在上面的例子中，我们已经可以看到由假数据渲染出来的结果了，现在，修改 loadData 方法，把真实的数据加载并渲染出来。
 
 我们会用到 ```Foundation``` 框架中的 ```URLSession``` 模块，用于加载远端数据。
 
@@ -874,5 +874,156 @@ didRender() {
 }
 ```
 
-嗯，我们要做的事情已经完成了，[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_8_1.ts)效果吧。
+嗯，我们要做的事情已经完成了，点此[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_8_1.ts)效果吧。
 
+#### 添加下拉刷新功能
+
+当用户在列表头部下拉时，会触发下拉刷新，要为 ```ListView``` 添加下拉刷新功能，我们需要用到 ```UI.RefreshControl```。
+
+```javascript
+this.listView.refreshControl = new UI.RefreshControl()
+this.listView.refreshControl.onRefresh = () => {
+	setTimeout(() => {
+		// 在这里获取数据，我们使用 setTimeout 模拟数据获取过程。
+		if (this.listView.refreshControl) {
+			// 获取数据完毕后，使用 endRefreshing 结束刷新状态。
+			this.listView.refreshControl.endRefreshing()
+		}
+	}, 3000)
+}
+```
+
+#### 添加加载更多功能
+
+当用户滑动至 ```ListView``` 底部时，会触发加载更多功能，要为 ```ListView``` 添加加载更多功能，我们需要用到 ```UI.LoadMoreControl```。
+
+```javascript
+this.listView.loadMoreControl = new UI.LoadMoreControl()
+this.listView.loadMoreControl.onLoad = () => {
+	setTimeout(() => {
+		// 在这里获取数据，我们使用 setTimeout 模拟数据获取过程。
+		if (this.listView.loadMoreControl) {
+			// 获取数据完毕后，使用 endLoading 结束加载状态。
+			this.listView.loadMoreControl.endLoading()
+		}
+	}, 3000)
+}
+```
+
+[点此查看](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_8_2.ts)完整的例子，这个例子展示了包括下拉刷新、加载更多功能。
+
+### 单行输入框
+
+```UI.TextField``` 提供单行文本输入功能。
+
+#### 添加一个圆角输入框
+
+默认的 ```UI.TextField``` 是没有样式的，也就是，空白一片，你需要为其提供一些 ```border``` 样式，以下例子，演示了如何添加一个圆角输入框到界面上。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooTextField = new UI.TextField()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.fooTextField.borderWidth = 1
+		this.fooTextField.borderColor = UI.Color.grayColor
+		this.fooTextField.cornerRadius = 18
+		this.fooTextField.placeholder = "Here's Placeholder"
+		this.fooTextField.textAlignment = UI.TextAlignment.Center
+		this.view.addSubview(this.fooTextField)
+		this.setupLayout()
+	}
+
+	setupLayout() {
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"H:[fooTextField(200)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"V:[fooTextField(36)]", this
+		))
+		this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
+			"C:fooTextField.centerX(_).centerY(_)", this
+		))
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_9_0.ts)
+
+#### 添加清除按钮
+
+你可以为 ```UI.TextField``` 添加一个清除按钮，这样，用户就可以快速地删除输入内容了。
+
+```javascript
+this.fooTextField.clearButtonMode = UI.TextFieldViewMode.WhileEditing
+```
+
+#### Return 按键类型
+
+你可以自定义虚拟键盘 Return 按钮的类型，但是，这只在 iOS 和 Android 原生平台上有效。
+
+```javascript
+this.fooTextField.returnKeyType = UI.ReturnKeyType.Send
+```
+
+#### 键盘类型
+
+你可以自定义虚拟键盘的类型，如果只需要数字键盘，则可以使用以下方式设置。
+
+```javascript
+this.fooTextField.keyboardType = UI.KeyboardType.NumbersAndPunctuation
+```
+
+#### 焦点
+
+你可以主动地触发 ```UI.TextField```，使用 ```focus``` 和 ```blur``` 方法即可。
+
+#### 事件
+
+设置以下属性值，可以得到相关事件，具体事件说明请参阅文档。
+
+```javascript
+shouldBeginEditing?: () => Boolean
+didBeginEditing?: () => void
+shouldEndEditing?: () => Boolean
+didEndEditing?: () => void
+shouldChange?: (inRange: { location: number, length: number }, replacementString: string) => Boolean
+shouldClear?: () => Boolean
+shouldReturn?: () => Boolean
+```
+
+### 多行输入框
+
+```UI.TextView``` 提供多行文本输入功能，使用方法与 ```UI.TextField``` 一致。
+
+### 画布
+
+```UI.CanvasView``` 是画布类，你可以在画布上执行各种绘图操作，画布的使用方法与 [Web Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API) 大同小异，具体 API 请参阅文档，我们只在此处粗略介绍其使用方法。
+
+以下例子，演示了如何添加一个蓝色方块到画布中。
+
+```javascript
+class HelloViewController extends UI.ViewController {
+
+	fooCanvasView = new UI.CanvasView()
+
+	viewDidLoad() {
+		super.viewDidLoad()
+		this.fooCanvasView.frame = UI.RectMake(0, 0, 300, 300)
+		this.fooCanvasView.backgroundColor = UI.Color.lightGrayColor
+		this.draw()
+		this.view.addSubview(this.fooCanvasView)
+	}
+
+	draw() {
+		this.fooCanvasView.fillStyle = UI.Color.blueColor
+		this.fooCanvasView.fillRect(44, 44, 88, 88)
+	}
+
+}
+```
+
+[试一试](http://xt-studio.com/XT-Playground-Web/#/samples/UIKit_10_0.ts)
