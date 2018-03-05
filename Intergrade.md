@@ -179,3 +179,49 @@ override fun onDestroy() {
     currentUIContext?.release()
 }
 ```
+
+### Web
+
+#### 自动加载
+
+首先，你需要将 ```app.min.js``` 放置在适当的位置，然后，参照以下 HTML 代码加载应用。 
+
+```html
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<style>
+    body {
+        margin: 0;
+        overflow-y: hidden;
+        -webkit-transform: translate3d(0, 0, 0);
+        -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        -o-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+</style>
+
+<body class="UIContext" src="./app.min.js" options='{"foo": "value"}'></body>
+
+<script src="https://cdn.jsdelivr.net/npm/xt-studio@0.1.0/index.min.js"></script>
+
+</html>
+``` 
+
+#### 手动加载
+
+你也可以使用手动加载的方式，初始化 ```UI.Context``` 并附着到视图。
+
+```javascript
+XTFrameworkLoader.loadUrl('./app.min.js', function (sourceURL) {
+    UI.Context.startWithURL(sourceURL, { foo: "value" }, function (_, context) {
+        context.attachTo(document.body)
+    })
+})
+```
+
+任何的 Div / Body 元素都可以成为目标加载视图。
