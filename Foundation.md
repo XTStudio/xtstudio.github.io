@@ -12,19 +12,19 @@
 
 你可以使用字符串创建一个 Data 对象。
 
-```javascript
+```typescript
 const data = NS.Data.initWithString("Hello, World!")
 ```
 
 也可以使用 Base64 编码字符串创建一个 Data 对象。
 
-```javascript
+```typescript
 const data = NS.Data.initWithBase64EncodedString("SGVsbG8sIEJlbmppIQ==")
 ```
 
 当然，使用 Uint8Array 创建一个 Data 对象，也是可以的。
 
-```javascript
+```typescript
 const data = NS.Data.initWithBytes(new Uint8Array([1, 2, 3, 4]))
 ```
 
@@ -32,7 +32,7 @@ const data = NS.Data.initWithBytes(new Uint8Array([1, 2, 3, 4]))
 
 你可以使用以下方法，获取 UTF-8 字符串（只支持 UTF-8）。
 
-```javascript
+```typescript
 const fooString = data.utf8String()
 ```
 
@@ -40,7 +40,7 @@ const fooString = data.utf8String()
 
 同样的，你也可以从 Data 对象中获取 Uint8Array 对象。
 
-```javascript
+```typescript
 const arr = data.getBytes()
 ```
 
@@ -48,7 +48,7 @@ const arr = data.getBytes()
 
 你可以通过 md5 和 sha1 方法，获取哈希值。
 
-```javascript
+```typescript
 const digest = data.md5()
 const digest = data.sha1()
 ```
@@ -57,7 +57,7 @@ const digest = data.sha1()
 
 你可以使用以下方法获得 Base64 编码后的字符串，或是 Base64 编码后的 Data 对象。
 
-```javascript
+```typescript
 const encodedString = data.base64EncodedString()
 const encodedData = data.base64EncodedData()
 ```
@@ -72,7 +72,7 @@ const encodedData = data.base64EncodedData()
 
 在发起 HTTP 请求前，你需要先初始化 ```NS.URLRequest``` 对象（也可以直接使用 URL 进行请求）。
 
-```javascript
+```typescript
 const request = new NS.URLRequest("https://api.github.com/users?since=0")
 request.setHTTPMethod("GET") // 设置 HTTPMethod，可选值为 GET POST PUT DELETE，默认值是 GET。
 request.setHTTPHeader("aValue", "aKey") // 设置 HTTP Header 信息。
@@ -83,7 +83,7 @@ request.setHTTPBody("XXXX") // 设置 HTTP 的正文信息，如果是 GET 请�
 
 我们需要使用 ```NS.URLSession``` 创建一个任务。
 
-```javascript
+```typescript
 const task = NS.URLSession.sharedSession.dataTaskWithRequest(request, (data, response, error) => {
 
 })
@@ -93,7 +93,7 @@ const task = NS.URLSession.sharedSession.dataTaskWithRequest(request, (data, res
 
 使用 ```resume``` 方法，激活一个任务。
 
-```javascript
+```typescript
 task.resume()
 ```
 
@@ -101,7 +101,7 @@ task.resume()
 
 我们需要修改一下 ```创建任务``` 的代码，以便获取返回数据，这个 API 返回的数据是 JSON 格式的 UTF-8 字符串，我们使用以下方法处理返回。
 
-```javascript
+```typescript
 const task = NS.URLSession.sharedSession.dataTaskWithRequest(request, (data, response, error) => {
     if (data) {
         try {
@@ -122,7 +122,7 @@ const task = NS.URLSession.sharedSession.dataTaskWithRequest(request, (data, res
 
 ### 创建实例
 
-```javascript
+```typescript
 this.socket = new NS.WebSocket("ws://sandbox.kaazing.net/echo").retain()
 ```
 
@@ -130,7 +130,7 @@ this.socket = new NS.WebSocket("ws://sandbox.kaazing.net/echo").retain()
 
 ### 监听事件
 
-```javascript
+```typescript
 this.socket.onOpen = () => {
     this.socket.sendString("Hello, World!");
 }
@@ -145,7 +145,7 @@ this.socket.onMessage = (msg) => {
 
 ### 断开连接
 
-```javascript
+```typescript
 this.socket.close()
 ```
 
@@ -157,13 +157,13 @@ this.socket.close()
 
 你可以写入 ```string | number | boolean | null | object | array``` 类型的值。
 
-```javascript
+```typescript
 NS.UserDefaults.standard.set("Hello, World!", "testKey")
 ```
 
 ### 读取
 
-```javascript
+```typescript
 const value = NS.UserDefaults.standard.get("testKey")
 ```
 
@@ -171,7 +171,7 @@ const value = NS.UserDefaults.standard.get("testKey")
 
 写入一个 ```undefined``` 值即可达到删除的目的。
 
-```javascript
+```typescript
 NS.UserDefaults.standard.set(undefined, "testKey")
 ```
 
@@ -194,14 +194,14 @@ NS.UserDefaults.standard.set(undefined, "testKey")
 
 ### 写入
 
-```javascript
+```typescript
 const data = NS.Data.initWithString("Hello, World!")
 NS.FileManager.document.writeData(data, "foo.txt")
 ```
 
 ### 读取
 
-```javascript
+```typescript
 const data = NS.FileManager.document.readData("foo.txt")
 console.log(data.utf8String())
 ```
@@ -210,19 +210,19 @@ console.log(data.utf8String())
 
 使用 ```list``` 方法遍历文件夹下的所有文件，这将得到一个数组对象。
 
-```javascript
+```typescript
 const allFiles = NS.FileManager.document.list('/')
 ```
 
 ### 检查文件是否存在
 
-```javascript
+```typescript
 NS.FileManager.document.isFileExist('foo.txt')
 ```
 
 ### 删除文件
 
-```javascript
+```typescript
 NS.FileManager.document.deleteFile('foo.txt')
 ```
 
@@ -232,7 +232,7 @@ NS.FileManager.document.deleteFile('foo.txt')
 
 ### 创建监听者
 
-```javascript
+```typescript
 this.observer = NS.NotificationCenter.default.addObserver("FooEvent", (note) => {
     console.log(note)
 })
@@ -242,7 +242,7 @@ this.observer = NS.NotificationCenter.default.addObserver("FooEvent", (note) => 
 
 发送事件的同时，可以附带两个参数，这将会附带在监听者得到的 note 对象中。
 
-```javascript
+```typescript
 NS.NotificationCenter.default.postNotification("FooEvent", "Hello, World!", { aKey: "aValue" });
 ```
 
@@ -250,6 +250,6 @@ NS.NotificationCenter.default.postNotification("FooEvent", "Hello, World!", { aK
 
 在不需要继续监听时，移除监听者。
 
-```javascript
+```typescript
 NS.NotificationCenter.default.removeObserver(this.observer)
 ```

@@ -20,7 +20,7 @@ UIKit 是一套 API 的集合，你可以使用 UIKit 创建包括图像、按�
 
 以下例子演示了，如何将一个黄色的 View 添加到红色的 View 中。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(0, 0, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -38,7 +38,7 @@ redView.addSubview(yellowView)
 
 以下例子演示了，将黄色 View 的父 View (就是红色方块) 的移动到 (88, 88) 上。
 
-```javascript
+```typescript
 if (yellowView.superview) {
     yellowView.superview.frame = UI.RectMake(88, 88, 88, 88)
 }
@@ -52,7 +52,7 @@ if (yellowView.superview) {
 
 以下例子演示了，将红色 View 下的所有 View 颜色更改为蓝色。
 
-```javascript
+```typescript
 redView.subviews.forEach((it => {
     it.backgroundColor = UI.Color.blueColor
 }))
@@ -66,7 +66,7 @@ redView.subviews.forEach((it => {
 
 以下例子演示了，将黄色 View 移出视图。
 
-```javascript
+```typescript
 yellowView.removeFromSuperview()
 ```
 
@@ -78,7 +78,7 @@ yellowView.removeFromSuperview()
 
 以下例子演示了，将黄色与绿色 View 添加至红色 View 中，并且绿色的可视层级更高。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(44, 44, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -110,7 +110,7 @@ redView.addSubview(greenView)
 
 如上述例子所示，要设置一个 View 的背景色，只需向 backgroundColor 属性赋予 ```UI.Color``` 实例即可。
 
-```javascript
+```typescript
 greenView.backgroundColor = UI.Color.greenColor
 ```
 
@@ -118,7 +118,7 @@ greenView.backgroundColor = UI.Color.greenColor
 
 ```UI.Color``` 是一个用于描述颜色的类，你可以直接使用 ```UI.Color``` 的预设颜色，如 ```UI.Color.redColor```，也可以通过 RGBA 数值初始化实例。
 
-```javascript
+```typescript
 const color = new UI.Color(0.17, 0.04, 0.10, 1.0) // (R, G, B, A)
 ```
 
@@ -126,7 +126,7 @@ const color = new UI.Color(0.17, 0.04, 0.10, 1.0) // (R, G, B, A)
 
 所有的 View 不透明度默认为 1.0，即完全显示，不透明度的属性值是 ```alpha```，其值允许的范围是 [0.0, 1.0]。
 
-```javascript
+```typescript
 fooView.alpha = 0.5
 ```
 
@@ -134,7 +134,7 @@ fooView.alpha = 0.5
 
 所有的 View 默认都是不隐藏的，要隐藏一个 View，除了可以将不透明度设置为 0.0 外，还可以将 ```hidden``` 属性设置为 ```true```。
 
-```javascript
+```typescript
 fooView.hidden = true
 ```
 
@@ -142,7 +142,7 @@ fooView.hidden = true
 
 要为视图添加圆角，你需要设置 ```cornerRadius```，以下例子演示了设置一个 10 的圆角。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(44, 44, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -159,7 +159,7 @@ redView.cornerRadius = 10
 
 以下例子演示了在一个圆角 View 中，裁剪超出其大小的子视图，请尝试把 ```clipsToBounds``` 设为 ```false```，看看有什么不同。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(44, 44, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -177,7 +177,7 @@ redView.addSubview(blurView)
 
 设置 ```borderWidth``` 和 ```borderColor``` 可以为视图添加实心边框。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(44, 44, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -191,7 +191,7 @@ redView.borderColor = UI.Color.blackColor
 
 这四个属性分别代表，阴影颜色、阴影不透明度、阴影方向、阴影扩散度。
 
-```javascript
+```typescript
 const view = new UI.View()
 view.frame = UI.RectMake(44, 44, 44, 44)
 view.cornerRadius = 22
@@ -224,7 +224,7 @@ view.shadowOffset = UI.SizeMake(4.0, 4.0)
 
 以下例子，表示 redView 在相对父 View 左上角的 (88, 88) 点上，大小为 (88, 88)。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(88, 88, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -246,7 +246,7 @@ redView.backgroundColor = UI.Color.redColor
 
 以下例子，演示如何将红色 View 旋转 45 度。
 
-```javascript
+```typescript
 const redView = new UI.View
 redView.frame = UI.RectMake(88, 88, 88, 88)
 redView.backgroundColor = UI.Color.redColor
@@ -274,7 +274,7 @@ redView.transform = new UI.TransformMatrix().postRotate(45 * Math.PI / 180)
 
 以下例子为顺时针旋转 45 度。
 
-```javascript
+```typescript
 new UI.TransformMatrix().postRotate(45 * Math.PI / 180)
 ```
 
@@ -282,7 +282,7 @@ new UI.TransformMatrix().postRotate(45 * Math.PI / 180)
 
 以下例子表示横向放大至 1.5 倍，纵向放大至 2.5 倍。
 
-```javascript
+```typescript
 new UI.TransformMatrix().postScale(1.5, 2.5)
 ```
 
@@ -290,7 +290,7 @@ new UI.TransformMatrix().postScale(1.5, 2.5)
 
 以下例子表示横向（向右）位移 20 个点，纵向（向下）位移 20 个点。
 
-```javascript
+```typescript
 new UI.TransformMatrix().postTranslate(20.0, 20.0)
 ```
 
@@ -312,7 +312,7 @@ VisualFormat 是 AutoLayout 的核心语言，借助 VisualFormat，你可以轻
 
 我们使用以下例子，演示如何将黄色 View 铺满整个屏幕。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	yellowView = new UI.View()
@@ -349,7 +349,7 @@ class HelloViewController extends UI.ViewController {
 
 完整的例子如下，灰色 View 在左侧，宽度为 100，灰色和黄色 View 与父视图等高。我们使用 this 替代第二个参数，你可以仔细摸索原因。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	grayView = new UI.View()
@@ -383,7 +383,7 @@ class HelloViewController extends UI.ViewController {
 
 ```"C:yellowView.centerX(_)"```，代表 yellowView 横向居中， ```C``` 开头的描述符表示这是一个居中描述，```(_)``` 表示居中于父视图。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	yellowView = new UI.View()
@@ -415,7 +415,7 @@ class HelloViewController extends UI.ViewController {
 
 下面例子演示了黄色与灰色 View 在水平方向上，相对居中。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	yellowView = new UI.View()
@@ -457,7 +457,7 @@ class HelloViewController extends UI.ViewController {
 
 在 VisualFormat 中可以在括号中使用比例，下面例子演示了，黄色 View 的高度始终是其宽度的 1.5 倍。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	yellowView = new UI.View()
@@ -514,7 +514,7 @@ UIKit 为开发者封装了各种常用的组件，借助组件，你不需要�
 
 按钮是可触摸的视图，```UI.Button``` 会根据手指的状态，给予不同的回调。
 
-```javascript
+```typescript
 onTouchDown: () => void           // 手指按下时回调
 onTouchDragInside: () => void     // 手指拖动时回调（仍然在按钮范围内）
 onTouchDragOutside: () => void    // 手指拖动时回调（不在按钮范围内）
@@ -531,7 +531,7 @@ onHover: () => void               // 鼠标经过时回调（仅 PC 浏览器有
 
 以下例子演示了一个文本按钮的使用
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooButton = new UI.Button
@@ -555,7 +555,7 @@ class HelloViewController extends UI.ViewController {
 
 以下例子演示了一个图像按钮的使用（这里使用网络图片作演示，使用本地图片的方法请参照 ImageView 一节）
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooButton = new UI.Button
@@ -593,7 +593,7 @@ class HelloViewController extends UI.ViewController {
 
 以下例子演示了，如何显示单行文本，并设置其字体、颜色。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooLabel = new UI.Label
@@ -619,7 +619,7 @@ class HelloViewController extends UI.ViewController {
 
 当文本框拥有固定宽度，并且 numberOfLines > 1 时（0表示无限行），文本会自动换行，以下例子演示，如何显示多行文本。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooLabel = new UI.Label
@@ -652,7 +652,7 @@ class HelloViewController extends UI.ViewController {
 
 在下面的例子中，你可以把 ```require('./success@2x.png')``` 当作 ```UI.Image``` 实例使用。
 
-```javascript
+```typescript
 const view = new UI.ImageView()
 view.frame = UI.RectMake(0, 66, 78, 78)
 view.image = require('./success@2x.png')
@@ -666,7 +666,7 @@ view.image = require('./success@2x.png')
 
 以下例子演示了，如何加载一张网络图片。
 
-```javascript
+```typescript
 const fooImageView = new UI.ImageView()
 fooImageView.frame = UI.RectMake(44, 44, 100, 100)
 UI.Image.fromURL("http://www.httpbin.org/image/png", (image) => {
@@ -691,7 +691,7 @@ UI.Image.fromURL("http://www.httpbin.org/image/png", (image) => {
 
 #### 添加子视图到 ScrollView 中
 
-```javascript
+```typescript
 const yellowView = new UI.View
 yellowView.frame = UI.RectMake(0, 0, 300, 300)
 yellowView.backgroundColor = UI.Color.yellowColor
@@ -706,7 +706,7 @@ this.scrollView.addSubview(redView)
 
 通过上面的 View 信息，我们可以得知，最大高度是 900，我们不需要横向滑动，可以忽略内容宽度。使用以下方法设置 ScrollView 的内容大小。
 
-```javascript
+```typescript
 this.scrollView.contentSize = UI.SizeMake(0, 900)
 ```
 
@@ -726,7 +726,7 @@ ListView 具有良好的内存管理机制，在 ```UI.ListView``` 管理下的 
 
 创建一个 ```UI.ListCell``` 子类，命名为 ```UserCell```。在其中添加 ```UI.ImageView``` 和 ```UI.Label```，分别用于显示用户头像和昵称。
 
-```javascript
+```typescript
 class UserCell extends UI.ListCell {
 
 	iconImageView = new UI.ImageView
@@ -770,7 +770,7 @@ class UserCell extends UI.ListCell {
 
 在 ```ViewController``` 中创建一个 ```UI.ListView``` 实例，将刚刚创建的 ```UserCell``` 注册到 ```this.listView```，并添加至 ```view``` 中。
 
-```javascript
+```typescript
 this.listView.register(UserCell, "Cell", this)
 this.view.addSubview(this.listView)
 this.view.addConstraints(UI.LayoutConstraint.constraintsWithVisualFormat(
@@ -786,7 +786,7 @@ this.view.layoutIfNeeded()
 * reuseIdentifier 是上一步我们注册 UserCell 所指定的复用标识。
 * rowHeight 是一个函数，返回该行的高度。
 
-```javascript
+```typescript
 loadData() {
     this.listView.items = [
         {
@@ -818,7 +818,7 @@ loadData() {
 
 我们会用到 ```Foundation``` 框架中的 ```URLSession``` 模块，用于加载远端数据。
 
-```javascript
+```typescript
 loadData() {
 	NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=0", (data) => {
 		if (data) {
@@ -864,7 +864,7 @@ loadData() {
 
 在 ```UserCell``` 类中添加 ```didRender``` 方法，把数据填充到 ImageView 和 Label 中。
 
-```javascript
+```typescript
 didRender() {
 	super.didRender()
 	if (this.currentItem) {
@@ -880,7 +880,7 @@ didRender() {
 
 当用户在列表头部下拉时，会触发下拉刷新，要为 ```ListView``` 添加下拉刷新功能，我们需要用到 ```UI.RefreshControl```。
 
-```javascript
+```typescript
 this.listView.refreshControl = new UI.RefreshControl()
 this.listView.refreshControl.onRefresh = () => {
 	setTimeout(() => {
@@ -897,7 +897,7 @@ this.listView.refreshControl.onRefresh = () => {
 
 当用户滑动至 ```ListView``` 底部时，会触发加载更多功能，要为 ```ListView``` 添加加载更多功能，我们需要用到 ```UI.LoadMoreControl```。
 
-```javascript
+```typescript
 this.listView.loadMoreControl = new UI.LoadMoreControl()
 this.listView.loadMoreControl.onLoad = () => {
 	setTimeout(() => {
@@ -920,7 +920,7 @@ this.listView.loadMoreControl.onLoad = () => {
 
 默认的 ```UI.TextField``` 是没有样式的，也就是，空白一片，你需要为其提供一些 ```border``` 样式，以下例子，演示了如何添加一个圆角输入框到界面上。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooTextField = new UI.TextField()
@@ -957,7 +957,7 @@ class HelloViewController extends UI.ViewController {
 
 你可以为 ```UI.TextField``` 添加一个清除按钮，这样，用户就可以快速地删除输入内容了。
 
-```javascript
+```typescript
 this.fooTextField.clearButtonMode = UI.TextFieldViewMode.WhileEditing
 ```
 
@@ -965,7 +965,7 @@ this.fooTextField.clearButtonMode = UI.TextFieldViewMode.WhileEditing
 
 你可以自定义虚拟键盘 Return 按钮的类型，但是，这只在 iOS 和 Android 原生平台上有效。
 
-```javascript
+```typescript
 this.fooTextField.returnKeyType = UI.ReturnKeyType.Send
 ```
 
@@ -973,7 +973,7 @@ this.fooTextField.returnKeyType = UI.ReturnKeyType.Send
 
 你可以自定义虚拟键盘的类型，如果只需要数字键盘，则可以使用以下方式设置。
 
-```javascript
+```typescript
 this.fooTextField.keyboardType = UI.KeyboardType.NumbersAndPunctuation
 ```
 
@@ -985,7 +985,7 @@ this.fooTextField.keyboardType = UI.KeyboardType.NumbersAndPunctuation
 
 设置以下属性值，可以得到相关事件，具体事件说明请参阅文档。
 
-```javascript
+```typescript
 shouldBeginEditing?: () => Boolean
 didBeginEditing?: () => void
 shouldEndEditing?: () => Boolean
@@ -1005,7 +1005,7 @@ shouldReturn?: () => Boolean
 
 以下例子，演示了如何添加一个蓝色方块到画布中。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooCanvasView = new UI.CanvasView()

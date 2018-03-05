@@ -45,7 +45,7 @@ XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它�
 
 ## 启动应用
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	fooLabel = new UI.Label()
@@ -127,7 +127,7 @@ const application = new UI.Application(undefined, new AppDelegate())
 
 我们定义这个 View 是红色的，并且位于屏幕左上角，其大小为 44 * 44 （在 XT 中，所有大小单位都是 Point）。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -155,7 +155,7 @@ class HelloViewController extends UI.ViewController {
 
 ```viewWillLayoutSubviews``` 是 ```UI.ViewController``` 的成员方法，每次 ```UI.ViewController::view``` 布局变化时，都会被触发，你可以在这个方法中改变子 View 的 frame，达到响应式布局的目的。使用以下代码，修改 ```redView.frame```，使其与屏幕等宽，```this.view.bounds```反映的是底层 View 的可视区域大小。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
     redView = new UI.View
@@ -187,7 +187,7 @@ class HelloViewController extends UI.ViewController {
 
 在以下例子中，我们在红色 View 中添加一个左间距为 20，右间距为 20 的黄色 View。
 
-```javascript
+```typescript
 class RedView extends UI.View {
 
 	yellowView = new UI.View
@@ -233,13 +233,13 @@ class HelloViewController extends UI.ViewController {
 
 在 XT 中，要为一个 View 设置样式，实际上就是修改这个 View 的属性，在上述的例子中，你已经留意到我们设置背景色所使用的方法。
 
-```javascript
+```typescript
 redView.backgroundColor = UI.Color.redColor
 ```
 
 同样的，我们可以为 ```UI.View``` 设置以下这些样式，这些样式的定义请参阅文档。
 
-```javascript
+```typescript
 clipsToBounds: boolean;
 backgroundColor: Color;
 alpha: number;
@@ -263,7 +263,7 @@ shadowRadius: number;
 
 只需为 ```view.onTap``` 赋值，即可响应单击事件，在以下例子中，单击红色 View 后，红色 View 将变为黄色。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -288,7 +288,7 @@ class HelloViewController extends UI.ViewController {
 
 长按事件比单击事件略为复杂，一个长按事件分为三个阶段，开始（Began）、移动（Changed）、结束（Ended），你必须显式地判断当前阶段，才能执行相关操作。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -319,7 +319,7 @@ class HelloViewController extends UI.ViewController {
 
 拖动事件与长按事件一致，也是分为三个阶段识别，同时，还包括四个附加回调参数，具体请参阅文档。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -372,7 +372,7 @@ class HelloViewController extends UI.ViewController {
 
 调用 ```UI.View.animationWithDuration``` 方法，第一个参数是动画时长，第二个参数是动画执行 Block，只需要在其中声明动画属性终点即可，第三个参数是动画结束 Block，它会在动画播放结束后被调用。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -401,7 +401,7 @@ class HelloViewController extends UI.ViewController {
 
 弹性动画调用方式与线性动画一致，唯一不同点在于传参，第一个参数是弹性系数，第二个参数是起始速度。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -438,7 +438,7 @@ class HelloViewController extends UI.ViewController {
 
 并且，我们的目标是要在点击红色 View 的时候，推入一个新的场景。在点击新场景的灰色 View 时，弹出这个场景。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
@@ -494,7 +494,7 @@ const application = new UI.Application(undefined, new AppDelegate())
 
 在 ```UI.ViewController``` 中调用 ```showNavigationBar``` 显示导航栏。设置 ```UI.ViewController::title```，可以设置导航栏标题。使用 ```this.navigationBar.xxx``` 可以配置导航栏样式（导航栏也是一个普通的 ```UI.View```）。
 
-```javascript
+```typescript
 class HelloViewController extends UI.ViewController {
 
 	viewDidLoad() {
