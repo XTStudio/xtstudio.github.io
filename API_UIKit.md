@@ -413,7 +413,31 @@ Button 继承 [View](#view) ，是一个可触摸的视图。
     onHover?: (hovered: boolean) => void
     ```
 
-## Image
+## ImageView
+
+ImageView 继承 [View](#view)，用于渲染一张图片。
+
+* 使用 image 属性设置一张图片
+
+    ```typescript
+    image?: Image;
+    ```
+
+* 使用 contentMode 控制图片的拉伸方式
+
+    ```typescript
+    contentMode: ContentMode;
+    ```
+
+* 使用 loadImage 加载一张图片
+
+    ```typescript
+    loadImage(url: string, fadeIn?: boolean): void
+    ```
+
+* 相关文档 [ContentMode](#contentmode)
+
+### Image
 
 Image 用于描述一张图片
 
@@ -453,30 +477,6 @@ Image 用于描述一张图片
     ```
 
 * 相关文档 [ImageRenderingMode](#imagerenderingmode)
-
-## ImageView
-
-ImageView 继承 [View](#view)，用于渲染一张图片。
-
-* 使用 image 属性设置一张图片
-
-    ```typescript
-    image?: Image;
-    ```
-
-* 使用 contentMode 控制图片的拉伸方式
-
-    ```typescript
-    contentMode: ContentMode;
-    ```
-
-* 使用 loadImage 加载一张图片
-
-    ```typescript
-    loadImage(url: string, fadeIn?: boolean): void
-    ```
-
-* 相关文档 [ContentMode](#contentmode)
 
 ## Label
 
@@ -621,11 +621,166 @@ ScrollView 继承 [View](#view)，是一个可滚动的视图。
 
 ## ListView
 
-## ListSection
+ListView 继承 [ScrollView](#scrollview)，是一个可滚动的列表视图。
 
-## ListCell
+* 给予 listHeaderView: [View](#view) 赋值，可以定义一个头部视图。
 
-## RefreshControl
+    ```typescript
+    listHeaderView?: View = undefined
+    ```
+
+* 给予 listFooterView: [View](#view) 赋值，可以定义一个底部视图。
+
+    ```typescript
+    listFooterView?: View = undefined
+    ```
+
+* 给予 items: ([ListItem](#listitem) | [ListSection](#listsection))[] 赋值，定义数据源。
+
+    ```typescript
+    items: (ListItem | ListSection)[] = []
+    ```
+
+* 给予 renderItem 赋值，当某一行需要渲染时，会得到回调。
+
+    ```typescript
+    renderItem?: (cell: ListCell, item: ListItem) => void = undefined
+    ```
+
+* 使用 register 注册一个可复用的 ListCell
+
+    ```typescript
+    register(clazz: typeof ListCell, reuseIdentifier: string, context?: any): void
+    ```
+
+* 在修改数据源后，使用 reloadData 刷新 ListView。
+
+    ```typescript
+    reloadData(): void
+    ```
+
+* 给予 refreshControl 属性一个 [RefreshControl](#refreshcontrol) 实例，激活下拉刷新功能。
+
+    ```typescript
+    refreshControl?: RefreshControl = undefined
+    ```
+
+* 给予 loadMoreControl 属性一个 [LoadMoreControl](#loadmorecontrol) 实例，激活加载更多功能。
+
+    ```typescript
+    loadMoreControl?: LoadMoreControl = undefined
+    ```
+
+### ListItem
+
+ListItem 是一个结构体，你也可以通过继承 ListEntity 的方式创建一个子类。
+
+```typescript
+interface ListItem {
+    [key: string]: any,
+    reuseIdentifier: string
+    rowHeight: (width: number) => number
+}
+```
+
+### ListSection
+
+ListSection 类用于展示一个章节的列表，章节可以拥有自己的头部和底部视图。
+
+* 给予 headerView: [View](#view) 赋值定义一个章节头部视图
+
+    ```typescript
+    headerView?: View = undefined
+    ```
+
+* 给予 footerView: [View](#view) 赋值定义一个章节底部视图
+
+    ```typescript
+    footerView?: View
+    ```
+
+* 给予 items: [ListItem](#listitem)[] 赋值定义该章节的数据集合
+
+    ```typescript
+    items: ListItem[] = [];
+    ```
+
+### ListCell
+
+ListCell 继承 [View](#view)，用于显示 [ListView](#listview) 一行内容。
+
+* 使用 currentItem: [ListItem](#listitem) 获取当前行数据
+
+    ```typescript
+    readonly currentItem?: ListItem = undefined
+    ```
+
+* 使用 selectionView: [View](#view) 修改高亮时的样式
+
+    ```typescript
+    readonly selectionView: View
+    ```
+
+* 你应该始终将子视图添加至 contentView: [View](#view) 中
+
+    ```typescript
+    readonly contentView: View
+    ```
+
+* 使用 context 属性获取在 [ListView](#listview) ```register``` 时传入的 context 参数。
+
+    ```typescript
+    readonly context?: any = undefined
+    ```
+
+* 设置 selectionStyle: [ListSelectionStyle](#listselectionstyle) 属性可控制 Cell 选中时是否高亮
+
+    ```typescript
+    selectionStyle: ListSelectionStyle
+    ```
+
+* 设置 bottomVisible 属性控制分隔线隐藏与否
+
+    ```typescript
+    bottomVisible: boolean = true
+    ```
+
+* bottomLineInsets: [Insets](#insets) 属性控制分隔线的左右边距
+
+    ```typescript
+    bottomLineInsets: Insets = {top: 0, left: 0, bottom: 0, right: 0}
+    ```
+
+* 重写 didHighlighted 方法以响应高亮状态变化
+
+    ```typescript
+    didHighlighted(highlighted: boolean): void
+    ```
+
+* 重写 didSelected 方法以响应 Cell 被选中后的事件
+
+    ```typescript
+    didSelected(): void
+    ```
+
+* 重写 didRender 方法以响应 Cell 被设置新的 currentItem 数据的事件
+
+    ```typescript
+    didRender(): void
+    ```
+
+#### ListSelectionStyle
+
+* ListSelectionStyle 描述 ListCell 高亮时的样式
+
+    ```typescript
+    enum ListSelectionStyle {
+        None,
+        Gray,
+    }
+    ```
+
+### RefreshControl
 
 RefreshControl 用于 [ListView](#listview) 下拉刷新功能。
 
@@ -659,7 +814,7 @@ RefreshControl 用于 [ListView](#listview) 下拉刷新功能。
     onRefresh?: () => void
     ```
 
-## LoadMoreControl
+### LoadMoreControl
 
 LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
 
