@@ -18,6 +18,52 @@ Context 是一个可交互应用的入口，你可以通过以下方法创建上
     static startWithURL(url: string, options: any, completion: (rootViewController: ViewController) => void, failure: (error: Error) => void): Context
     ```
 
+## ApplicationDelegate
+
+ApplicationDelegate 是应用的回调类。
+
+* 给予 window 属性赋值以便声明应用主窗口
+
+    ```typescript
+    window?: Window;
+    ```
+
+* 应用启动完成后，会回调 ```applicationDidFinishLaunchingWithOptions``` 方法，在这里处理窗口初始化工作。
+
+    ```typescript
+    applicationDidFinishLaunchingWithOptions(application: Application, launchOptions: Object): void
+    ```
+
+## Application
+
+Application 是应用的根对象
+
+* 初始化应用，第一个参数填 undefined 即可，第二个参数应该填入一个 ```ApplicationDelegate``` 对象。
+
+    ```typescript
+    constructor(t: any, delegate: ApplicationDelegate)
+    ```
+
+* 当应用初始化后，使用以下方法获取应用单例。
+
+    ```typescript
+    static sharedApplication(): Application
+    ```
+
+* 你可以直接获取到初始化时的 delegate 对象
+
+    ```typescript
+    readonly delegate: ApplicationDelegate
+    ```
+
+* 你可以获取到 keyWindow
+
+    ```typescript
+    readonly keyWindow?: Window
+    ```
+
+* 相关文档 [Window](#window)
+
 ## View
 
 ```View``` 是所有视图的基类。
@@ -48,6 +94,35 @@ Context 是一个可交互应用的入口，你可以通过以下方法创建上
     center: TransformMatrix = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};
     ```
 
+* 当约束存在变化时，调用 ```setNeedsLayout()``` 可以在下一个循环中更新布局，调用 ```layoutIfNeeded()``` 可以立即更新布局。
+
+* 当视图大小发生变化时 ```layoutSubviews()``` 方法会被调用，你可以通过重写这个方法，手动布局子视图。
+
+### 约束
+
+你可以使用以下 API 为视图添加、删除布局约束，约束变更后，要记得调用 ```setNeedsLayout()```。
+
+* 获取所有约束
+
+    ```typescript
+    constraints: LayoutConstraint[] = []
+    ```
+
+* 添加约束
+
+    ```typescript
+    addConstraint(constraint: LayoutConstraint): void
+    addConstraints(constraints: LayoutConstraint[]): void
+    ```
+
+* 移除约束
+
+    ```typescript
+    removeConstraint(constraint: LayoutConstraint): void
+    removeAllConstraints(): void
+    ```
+
+* 相关文档 [LayoutConstraint](#layoutconstraint)
 
 ### 渲染
 
@@ -185,7 +260,440 @@ Context 是一个可交互应用的入口，你可以通过以下方法创建上
     didMoveToWindow(): void
     ```
 
-## 结构体
+* 要确认一个视图是否从属于另外一个视图
+
+    ```typescript
+    isDescendantOfView(view: View): boolean
+    ```
+
+### 触摸
+
+* 使用 userInteractionEnabled 属性控制该视图（包括子视图）是否响应触摸
+
+    ```typescript
+    userInteractionEnabled: boolean = true;
+    ```
+
+* 使用 longPressDuration 属性控制长按手势最小识别时长
+
+    ```typescript
+    longPressDuration: number = 0.5;
+    ```
+
+* 为以下属性赋值，激活相应手势识别器，其中 [InteractionState](#interactionstate) 是触摸状态。
+
+    ```typescript
+    onTap?: () => void
+    onDoubleTap?: () => void
+    onLongPress?: (state: InteractionState, viewLocation: () => Point, absLocation: Point) => void
+    onPan?: (state: InteractionState, viewLocation: () => Point, absLocation: Point, velocity: Point, translation: Point) => void
+    ```
+
+### 动画
+
+* 线性动画
+
+    ```typescript
+    /**
+     * 定义并触发一组线性动画
+     */
+    static animationWithDuration(duration: number, animations: () => void, completion?: () => void): void
+    ```
+
+* 弹性动画
+
+    ```typescript
+    /** 
+     * 此值只对 iOS 有效
+     */
+    static springAnimationDuration: number
+    /**
+     * 定义并触发一组弹性动画
+     */
+    static animationWithBouncinessAndSpeed(damping: number, velocity: number, animations: () => void, completion?: () => void): void
+    ```
+
+## LayoutConstraint
+
+LayoutConstraint 类，用于描述多个视图之间的约束关系。
+
+* 使用 Visual Format 生成约束
+
+    ```typescript
+    static constraintsWithVisualFormat(format: string, views?: { [key: string]: View } | Object): LayoutConstraint[]
+    ```
+
+* 使用参数生成约束
+
+    ```typescript
+    constructor(firstItem?: View, firstAttr?: LayoutAttribute, relation?: LayoutRelation, 
+                secondItem?: View, secondAttr?: LayoutAttribute, 
+                constant?: number, multiplier?: number)
+    ```
+
+* 相关文档 [LayoutAttribute](#layoutattribute) / [LayoutRelation](#layoutrelation)
+
+## Button
+
+Button 继承 [View](#view) ，是一个可触摸的视图。
+
+* 使用 font: [Font](#font) 修改按钮的字体
+
+    ```typescript
+    font: Font;
+    ```
+
+* 使用 title 修改按钮的文字
+
+    ```typescript
+    title?: string
+    ```
+
+* 使用 image?: [Image](#image) 属性修改按钮的图片
+
+    ```typescript
+    image?: Image;
+    ```
+
+* 使用 color: [Color](#color) 属性修改按钮的文字、图片颜色
+
+    ```typescript
+    color: Color = tintColor
+    ```
+
+* 使用 vertical 和 inset 属性控制图片、文本的布局
+
+    ```typescript
+    vertical: boolean = false;
+    inset: number = 0; 
+    ```
+
+* 给以下属性赋值，响应按钮的各种事件
+
+    ```typescript
+    /**
+     * 按下时
+     */
+    onTouchDown?: () => void
+    /**
+     * 在按钮内部拖动时
+     */
+    onTouchDragInside?: () => void
+    /**
+     * 在按钮外部拖动时
+     */
+    onTouchDragOutside?: () => void
+    /**
+     * 拖动过程中，手指从外部转至内部
+     */
+    onTouchDragEnter?: () => void
+    /**
+     * 拖动过程中，手指从内部转至外部
+     */
+    onTouchDragExit?: () => void
+    /**
+     * 手指在按钮内部弹起
+     */
+    onTouchUpInside?: () => void
+    /**
+     * 手指在按钮外部弹起
+     */
+    onTouchUpOutside?: () => void
+    /**
+     * 触摸被取消
+     */
+    onTouchCancel?: () => void
+    /**
+     * 高亮变化时
+     */
+    onHighlighted?: (highligted: boolean) => void
+    /**
+     * 仅 PC 端有效，鼠标经过（离开）时。
+     */
+    onHover?: (hovered: boolean) => void
+    ```
+
+## Image
+
+Image 用于描述一张图片
+
+* 通过服务器地址创建图片
+
+    ```typescript
+    static fromURL(url: string, success: (image: Image) => void, failure?: (error: Error) => void): void
+    ```
+
+* 通过 Base64 编码字符串创建图片
+
+    ```typescript
+    static fromBase64(value: string, scale: number, bitmapWidth?: number, bitmapHeight?: number): Image | undefined
+    ```
+
+* 获取 Image 的信息
+
+    ```typescript
+    /**
+     * 图片的大小
+     */
+    readonly size: Size;
+    /**
+     * 图片的倍率
+     */
+    readonly scale: number;
+    /**
+     * 图片的渲染模式
+     */
+    readonly renderingMode: ImageRenderingMode;
+    ```
+
+* 修改 renderingMode 并获取一个新的 Image 对象
+
+    ```typescript
+    imageWithImageRenderingMode(renderingMode: ImageRenderingMode): Image
+    ```
+
+* 相关文档 [ImageRenderingMode](#imagerenderingmode)
+
+## ImageView
+
+ImageView 继承 [View](#view)，用于渲染一张图片。
+
+* 使用 image 属性设置一张图片
+
+    ```typescript
+    image?: Image;
+    ```
+
+* 使用 contentMode 控制图片的拉伸方式
+
+    ```typescript
+    contentMode: ContentMode;
+    ```
+
+* 使用 loadImage 加载一张图片
+
+    ```typescript
+    loadImage(url: string, fadeIn?: boolean): void
+    ```
+
+* 相关文档 [ContentMode](#contentmode)
+
+## Label
+
+Label 继承 [View](#view)，用于渲染单行或多行文本。
+
+* 使用 text 属性设置文本
+
+    ```typescript
+    text: string;
+    ```
+
+* 使用 font: [Font](#font) 属性设置字体
+
+    ```typescript
+    font: Font = Font.systemFontOfSize(14.0)
+    ```
+
+* 使用 textColor: [Color](#color) 属性设置字体颜色
+
+    ```typescript
+    textColor: Color = Color.blackColor
+    ```
+
+* 使用 textAlignment: [TextAlignment](#textalignment) 属性设置文本对齐方式
+
+    ```typescript
+    textAlignment: TextAlignment = TextAlignment.Left
+    ```
+
+* 使用 numberOfLines 属性设置文本最大行数，为 0 时表示不限制行数。
+
+    ```typescript
+    numberOfLines: number = 0
+    ```
+
+* 使用 lineBreakMode: [LineBreakMode](#linebreakmode) 属性设置文本换行方式
+
+    ```typescript
+    lineBreakMode: LineBreakMode = LineBreakMode.WordWrapping
+    ```
+
+* 使用 letterSpace 控制字符间距
+
+    ```typescript
+    letterSpace: number = 0
+    ```
+
+* 使用 lineSpace 控制行间距
+
+    ```typescript
+    lineSpace: number = 0
+    ```
+
+* 使用 textRectForBounds 方法，获取当前文本在指定视图大小中的内容宽高
+
+    ```typescript
+    textRectForBounds(bounds: Rect): Rect
+    ```
+
+## ScrollView
+
+ScrollView 继承 [View](#view)，是一个可滚动的视图。
+
+* 使用 contentOffset: [Point](#point) 设置、获取当前滚动位置
+
+    ```typescript
+    contentOffset: Point = {x: 0, y: 0}
+    ```
+
+* 使用 setContentOffset 方法，可以动画缓动方式滚动至指定位置。
+
+    ```typescript
+    setContentOffset(value: Point, animated: boolean): void
+    ```
+
+* 使用 scrollRectToVisible 方法，使得指定位置的内容可见（通过滚动的方式）。
+
+    ```typescript
+    scrollRectToVisible(rect: Rect, animated: boolean): void
+    ```
+
+* 使用 contentSize: [Size](#size) 设置可滚动区域宽高
+
+    ```typescript
+    contentSize: Size = {width: 0, height: 0}
+    ```
+
+* 使用 contentInset: [Insets](#insets) 设置边界可滚动区域大小
+
+    ```typescript
+    contentInset: Insets = {top: 0, left: 0, bottom: 0, right: 0}
+    ```
+
+* 使用 isPagingEnabled 设置是否允许分页滚动
+
+    ```typescript
+    isPagingEnabled: boolean = false
+    ```
+
+* 使用 isDirectionalLockEnabled 设置是否只允许在单个方向上滚动
+
+    ```typescript
+    isDirectionalLockEnabled: boolean = true
+    ```
+
+* 使用 isScrollEnabled 设置是否允许滚动
+
+    ```typescript
+    isScrollEnabled: boolean = true
+    ```
+
+* 使用 bounces 设置是否允许回弹（仅 iOS 有效）
+
+    ```typescript
+    bounces: boolean = true
+    ```
+
+* 使用 alwaysBounceVertical 设置是否允许总在竖向上回弹（即使内容高度小于视图高度）
+
+    ```typescript
+    alwaysBounceVertical: boolean = false
+    ```
+
+* 使用 alwaysBounceHorizontal 设置是否允许总在横向上回弹（即使内容宽度小于视图宽度）
+
+    ```typescript
+    alwaysBounceHorizontal: boolean = false
+    ```
+
+* 使用 showsHorizontalScrollIndicator 和 showsVerticalScrollIndicator 控制滚动条的显示与否
+
+    ```typescript
+    showsHorizontalScrollIndicator: boolean = true
+    showsVerticalScrollIndicator: boolean = true
+    ```
+
+* 给予 onScroll 赋值，可以在视图滚动的同时得到回调。
+
+    ```typescript
+    onScroll?: (scrollView: ScrollView) => void
+    ```
+
+## ListView
+
+## ListSection
+
+## ListCell
+
+## RefreshControl
+
+RefreshControl 用于 [ListView](#listview) 下拉刷新功能。
+
+* 使用 enabled 属性设置当前 RefreshControl 是否可用
+
+    ```typescript
+    enabled: boolean = true
+    ```
+
+* 使用 color: [Color](#color) 属性设置 Loading 颜色
+
+    ```typescript
+    color: Color
+    ```
+
+* 使用 isRefreshing 属性获知当前刷新状态
+
+    ```typescript
+    readonly isRefreshing: boolean
+    ```
+
+* 使用 endRefreshing 方法结束刷新状态
+
+    ```typescript
+    endRefreshing(): void
+    ```
+
+* 给予 onRefresh 属性赋值，响应下拉刷新触发。
+
+    ```typescript
+    onRefresh?: () => void
+    ```
+
+## LoadMoreControl
+
+LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
+
+* 使用 enabled 属性设置当前 LoadMoreControl 是否可用
+
+    ```typescript
+    enabled: boolean = true
+    ```
+
+* 使用 color: [Color](#color) 属性设置 Loading 颜色
+
+    ```typescript
+    color: Color
+    ```
+
+* 使用 isLoading 属性获知当前加载状态
+
+    ```typescript
+    readonly isLoading: boolean
+    ```
+
+* 使用 endLoading 方法结束加载状态
+
+    ```typescript
+    endLoading(): void
+    ```
+
+* 给予 onLoad 属性赋值，响应加载更多事件触发。
+
+    ```typescript
+    onLoad?: () => void
+    ```
+
+## Structs
 
 ### Rect
 
@@ -332,4 +840,161 @@ Context 是一个可交互应用的入口，你可以通过以下方法创建上
 
     ```typescript
     equals(toColor: Color | undefined): boolean
+    ```
+
+### InteractionState
+
+* InteractionState 用于描述当前触摸状态
+
+    ```typescript
+    enum InteractionState {
+        /**
+         * 触摸开始
+         */
+        Began,
+        /**
+         * 触摸持续
+         */
+        Changed,
+        /**
+         * 触摸结束
+         */
+        Ended,
+        /**
+         * 触摸取消
+         */
+        Cancelled,
+    }
+    ```
+
+### Font
+
+* Font 类用于描述字体样式
+
+    ```typescript
+    /**
+     * 字体家族
+     */
+    readonly familyName?: string;
+    /**
+     * 字体大小
+     */
+    readonly pointSize: number;
+    /**
+     * 字体粗细，可选值（100, 200, 300, 400, 500, 600, 700, 800, 900）
+     */
+    readonly fontWeight: string;
+    /**
+     * 字体样式，可选 normal italic bold
+     */
+    readonly fontStyle: string;
+    constructor(pointSize: number, fontWeight?: string, fontStyle?: string, familyName?: string)
+    ```
+
+* 使用预设值
+
+    ```typescript
+    /**
+     * 返回系统正常字体 
+     */
+    static systemFontOfSize(pointSize: number, weight?: string): Font
+    /**
+     * 返回系统粗体 
+     */
+    static boldSystemFontOfSize(pointSize: number): Font
+    /**
+     * 返回系统斜体 
+     */
+    static italicSystemFontOfSize(pointSize: number): Font
+    ```
+
+### LayoutAttribute
+
+LayoutAttribute 描述约束边界类型
+
+    ```typescript
+    enum LayoutAttribute {
+        Const = 0,
+        Left = 1,
+        Right = 2,
+        Top = 3,
+        Bottom = 4,
+        Width = 7,
+        Height = 8,
+        CenterX = 9,
+        CenterY = 10,
+    }
+    ```
+
+### LayoutRelation
+
+LayoutRelation 描述约束数值对比方法
+
+    ```typescript
+    enum LayoutRelation {
+        Less = -1,
+        Equal = 0,
+        Greater = 1,
+    }
+    ```
+
+### ImageRenderingMode
+
+ImageRenderingMode 描述图片的渲染方式
+
+    ```typescript
+    enum ImageRenderingMode {
+        /**
+         * 使用原图渲染
+         */
+        Original,
+        /**
+         * 使用视图主色（tintColor）渲染
+         */
+        Template,
+    }
+    ```
+
+### ContentMode
+
+ContentMode 描述视图内容的拉伸方式
+
+    ```typescript
+    enum ContentMode {
+        /**
+         * 非比例拉伸，铺满视图
+         */
+        ScaleToFill,
+        /**
+         * 等比例拉伸，并且不会超出视图区域
+         */
+        ScaleAspectFit,
+        /**
+         * 等比例拉伸，可能超出视图区域
+         */
+        ScaleAspectFill,
+    }
+    ```
+
+### TextAlignment
+
+TextAlignment 描述文本水平对齐方式
+
+    ```typescript
+    enum TextAlignment {
+        Left,
+        Center,
+        Right,
+    }
+    ```
+
+### LineBreakMode
+
+LineBreakMode 描述水平换行方式
+
+    ```typescript
+    enum LineBreakMode {
+        WordWrapping = 0,
+        TruncatingTail = 4,
+    }
     ```
