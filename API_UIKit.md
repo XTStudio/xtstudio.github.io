@@ -56,13 +56,11 @@ Application 是应用的根对象
     readonly delegate: ApplicationDelegate
     ```
 
-* 你可以获取到 keyWindow
+* 你可以获取到 keyWindow: [Window](#window)
 
     ```typescript
     readonly keyWindow?: Window
     ```
-
-* 相关文档 [Window](#window)
 
 ## View
 
@@ -289,6 +287,31 @@ Application 是应用的根对象
     onPan?: (state: InteractionState, viewLocation: () => Point, absLocation: Point, velocity: Point, translation: Point) => void
     ```
 
+#### InteractionState
+
+* InteractionState 用于描述当前触摸状态
+
+    ```typescript
+    enum InteractionState {
+        /**
+         * 触摸开始
+         */
+        Began,
+        /**
+         * 触摸持续
+         */
+        Changed,
+        /**
+         * 触摸结束
+         */
+        Ended,
+        /**
+         * 触摸取消
+         */
+        Cancelled,
+    }
+    ```
+
 ### 动画
 
 * 线性动画
@@ -313,6 +336,28 @@ Application 是应用的根对象
     static animationWithBouncinessAndSpeed(damping: number, velocity: number, animations: () => void, completion?: () => void): void
     ```
 
+## Window
+
+Window 继承 [View](#view)，是一个特殊的视图，它位于最底一级。
+
+* 你必须给 rootViewController: [ViewController](#viewcontroller) 赋予一个 [ViewController](#viewcontroller) 实例。
+
+    ```typescript
+    rootViewController?: ViewController = undefined
+    ```
+
+* 调用 ```makeKeyAndVisible``` 方法，```Window``` 会成为 ```Appplication``` 的 ```keyWindow```。
+
+    ```typescript
+    makeKeyAndVisible(): void
+    ```
+
+* 调用 endEditing 方法可以让所有输入框失去输入焦点
+
+    ```typescript
+    endEditing(): void
+    ```
+
 ## LayoutConstraint
 
 LayoutConstraint 类，用于描述多个视图之间的约束关系。
@@ -331,7 +376,35 @@ LayoutConstraint 类，用于描述多个视图之间的约束关系。
                 constant?: number, multiplier?: number)
     ```
 
-* 相关文档 [LayoutAttribute](#layoutattribute) / [LayoutRelation](#layoutrelation)
+### LayoutAttribute
+
+* LayoutAttribute 描述约束边界类型
+
+    ```typescript
+    enum LayoutAttribute {
+        Const = 0,
+        Left = 1,
+        Right = 2,
+        Top = 3,
+        Bottom = 4,
+        Width = 7,
+        Height = 8,
+        CenterX = 9,
+        CenterY = 10,
+    }
+    ```
+
+### LayoutRelation
+
+* LayoutRelation 描述约束数值对比方法
+
+    ```typescript
+    enum LayoutRelation {
+        Less = -1,
+        Equal = 0,
+        Greater = 1,
+    }
+    ```
 
 ## Button
 
@@ -374,43 +447,43 @@ Button 继承 [View](#view) ，是一个可触摸的视图。
     /**
      * 按下时
      */
-    onTouchDown?: () => void
+    onTouchDown?: (sender: this) => void
     /**
      * 在按钮内部拖动时
      */
-    onTouchDragInside?: () => void
+    onTouchDragInside?: (sender: this) => void
     /**
      * 在按钮外部拖动时
      */
-    onTouchDragOutside?: () => void
+    onTouchDragOutside?: (sender: this) => void
     /**
      * 拖动过程中，手指从外部转至内部
      */
-    onTouchDragEnter?: () => void
+    onTouchDragEnter?: (sender: this) => void
     /**
      * 拖动过程中，手指从内部转至外部
      */
-    onTouchDragExit?: () => void
+    onTouchDragExit?: (sender: this) => void
     /**
      * 手指在按钮内部弹起
      */
-    onTouchUpInside?: () => void
+    onTouchUpInside?: (sender: this) => void
     /**
      * 手指在按钮外部弹起
      */
-    onTouchUpOutside?: () => void
+    onTouchUpOutside?: (sender: this) => void
     /**
      * 触摸被取消
      */
-    onTouchCancel?: () => void
+    onTouchCancel?: (sender: this) => void
     /**
      * 高亮变化时
      */
-    onHighlighted?: (highligted: boolean) => void
+    onHighlighted?: (sender: this, highligted: boolean) => void
     /**
      * 仅 PC 端有效，鼠标经过（离开）时。
      */
-    onHover?: (hovered: boolean) => void
+    onHover?: (sender: this, hovered: boolean) => void
     ```
 
 ## ImageView
@@ -423,7 +496,7 @@ ImageView 继承 [View](#view)，用于渲染一张图片。
     image?: Image;
     ```
 
-* 使用 contentMode 控制图片的拉伸方式
+* 使用 contentMode: [ContentMode](#contentmode) 控制图片的拉伸方式
 
     ```typescript
     contentMode: ContentMode;
@@ -434,8 +507,6 @@ ImageView 继承 [View](#view)，用于渲染一张图片。
     ```typescript
     loadImage(url: string, fadeIn?: boolean): void
     ```
-
-* 相关文档 [ContentMode](#contentmode)
 
 ### Image
 
@@ -476,7 +547,43 @@ Image 用于描述一张图片
     imageWithImageRenderingMode(renderingMode: ImageRenderingMode): Image
     ```
 
-* 相关文档 [ImageRenderingMode](#imagerenderingmode)
+#### ImageRenderingMode
+
+* ImageRenderingMode 描述图片的渲染方式
+
+    ```typescript
+    enum ImageRenderingMode {
+        /**
+         * 使用原图渲染
+         */
+        Original,
+        /**
+         * 使用视图主色（tintColor）渲染
+         */
+        Template,
+    }
+    ```
+
+### ContentMode
+
+* ContentMode 描述视图内容的拉伸方式
+
+    ```typescript
+    enum ContentMode {
+        /**
+         * 非比例拉伸，铺满视图
+         */
+        ScaleToFill,
+        /**
+         * 等比例拉伸，并且不会超出视图区域
+         */
+        ScaleAspectFit,
+        /**
+         * 等比例拉伸，可能超出视图区域
+         */
+        ScaleAspectFill,
+    }
+    ```
 
 ## Label
 
@@ -534,6 +641,29 @@ Label 继承 [View](#view)，用于渲染单行或多行文本。
 
     ```typescript
     textRectForBounds(bounds: Rect): Rect
+    ```
+
+### TextAlignment
+
+TextAlignment 描述文本水平对齐方式
+
+    ```typescript
+    enum TextAlignment {
+        Left,
+        Center,
+        Right,
+    }
+    ```
+
+### LineBreakMode
+
+LineBreakMode 描述水平换行方式
+
+    ```typescript
+    enum LineBreakMode {
+        WordWrapping = 0,
+        TruncatingTail = 4,
+    }
     ```
 
 ## ScrollView
@@ -616,7 +746,7 @@ ScrollView 继承 [View](#view)，是一个可滚动的视图。
 * 给予 onScroll 赋值，可以在视图滚动的同时得到回调。
 
     ```typescript
-    onScroll?: (scrollView: ScrollView) => void
+    onScroll?: (sender: this) => void
     ```
 
 ## ListView
@@ -811,7 +941,7 @@ RefreshControl 用于 [ListView](#listview) 下拉刷新功能。
 * 给予 onRefresh 属性赋值，响应下拉刷新触发。
 
     ```typescript
-    onRefresh?: () => void
+    onRefresh?: (sender: this) => void
     ```
 
 ### LoadMoreControl
@@ -845,10 +975,893 @@ LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
 * 给予 onLoad 属性赋值，响应加载更多事件触发。
 
     ```typescript
-    onLoad?: () => void
+    onLoad?: (sender: this) => void
     ```
 
-## Structs
+## CanvasView
+
+CanvasView 继承 [View](#view)，用于在视图上绘制图案。
+
+* 使用 globalAlpha 设定绘制透明度
+
+    ```typescript
+    globalAlpha: number = 1.0
+    ```
+
+* 使用 fillStyle: [Color](#color) 设定填充颜色
+
+    ```typescript
+    fillStyle: Color = Color.clearColor
+    ```
+
+* 使用 strokeStyle: [Color](#color) 设定描边颜色
+
+    ```typescript
+    strokeStyle: Color = Color.clearColor
+    ```
+
+* 使用 lineCap 设定线端末端样式
+
+    ```typescript
+    lineCap: "butt" | "round" | "square" = "butt"
+    ```
+
+* 使用 lineJoin 设定线端交汇边角样式
+
+    ```typescript
+    lineJoin: "bevel" | "round" | "miter" = "bevel"
+    ```
+
+* 使用 lineWidth 设定线宽
+
+    ```typescript
+    lineWidth: number = 1.0
+    ```
+
+* 使用 miterLimit 设定最大斜接长度
+
+    ```typescript
+    miterLimit: number = 0.0
+    ```
+
+* 调用 rect 方法绘制一个方形
+
+    ```typescript
+    rect(x: number, y: number, width: number, height: number): void
+    ```
+
+* 调用 fillRect 方法绘制一个方形并填充颜色
+
+    ```typescript
+    fillRect(x: number, y: number, width: number, height: number): void
+    ```
+
+* 调用 strokeRect 方法绘制一个方形并描边
+
+    ```typescript
+    strokeRect(x: number, y: number, width: number, height: number): void
+    ```
+
+* 调用 fill 为当前形状填充颜色
+
+    ```typescript
+    fill(): void
+    ```
+
+* 调用 stroke 为当前形状描边
+
+    ```typescript
+    stroke(): void
+    ```
+
+* 调用 beginPath 清空上一次绘制路径，并开始新一次的路径绘制。
+
+    ```typescript
+    beginPath(): void
+    ```
+
+* 调用 move，把路径移动到画布中的指定点，不创建线条。
+
+    ```typescript
+    moveTo(x: number, y: number): void
+    ```
+
+* 调用 closePath，创建从当前点回到起始点的路径。
+
+    ```typescript
+    closePath(): void
+    ```
+
+* 调用 lineTo，添加一个新点，然后在画布中创建从该点到最后指定点的线条。
+
+    ```typescript
+    lineTo(x: number, y: number): void
+    ```
+
+* 调用 quadraticCurveTo，创建二次贝塞尔曲线。
+
+    ```typescript
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void
+    ```
+
+* 调用 bezierCurveTo，创建三次方贝塞尔曲线。
+
+    ```typescript
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void
+    ```
+
+* 调用 arc，创建弧/曲线（用于创建圆形或部分圆）。
+
+    ```typescript
+    arc(x: number, y: number, r: number, sAngle: number, eAngle: number, counterclockwise?: boolean): void
+    ```
+
+* 调用 isPointInPath，检测指定的点是否位于当前绘制路径中。
+
+    ```typescript
+    isPointInPath(x: number, y: number): boolean
+    ```
+
+* 调用 postScale，缩放当前绘图至更大或更小。
+
+    ```typescript
+    postScale(x: number, y: number): void
+    ```
+
+* 调用 postRotate，旋转当前绘图。
+
+    ```typescript
+    postRotate(angle: number): void
+    ```
+
+* 调用 postTranslate，位移当前绘图。
+
+    ```typescript
+    postTranslate(x: number, y: number): void
+    ```
+
+* 调用 postTransform，合并一个变换矩阵到当前绘图上。
+
+    ```typescript
+    postTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void
+    ```
+
+* 调用 setTransform，重置当前绘图为目标变换矩阵。
+
+    ```typescript
+    setTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void
+    ```
+
+* 调用 save，保存当前环境的状态。
+
+    ```typescript
+    save(): void
+    ```
+
+* 调用 restore，返回之前保存过的路径状态和属性。
+
+    ```typescript
+    restore(): void
+    ```
+
+* 调用 clear，清空画布，并清空所有状态。
+
+    ```typescript
+    clear(): void
+    ```
+
+## TextField
+
+TextField 继承 [View](#view)，是单行文本输入框。
+
+* 使用 text 属性设置、获取当前文本
+
+    ```typescript
+    text: string = ""
+    ```
+
+* 使用 font 属性设置文本样式
+
+    ```typescript
+    font: Font = Font.systemFontOfSize(14.0)
+    ```
+
+* 使用 textColor 属性设置文字颜色
+
+    ```typescript
+    textColor: Color = Color.blackColor
+    ```
+
+* 使用 textAlignment: [TextAlignment](#textalignment) 属性设置文本对齐方式
+
+    ```typescript
+    textAlignment: TextAlignment
+    ```
+
+* 使用 placeholder 属性设置占位文本
+
+    ```typescript
+    placeholder: string;
+    ```
+
+* 使用 placeholderColor: [Color](#color) 属性设置占位文字颜色
+
+    ```typescript
+    placeholderColor: Color
+    ```
+
+* 使用 clearsOnBeginEditing 属性设置当编辑开始时是否需要清空之前的输入
+
+    ```typescript
+    clearsOnBeginEditing: Boolean = false
+    ```
+
+* 通过 editing 属性获取当前是否正在编辑
+
+    ```typescript
+    readonly editing: Boolean
+    ```
+
+* 使用 clearButtonMode: [TextFieldViewMode](#textfieldviewmode) 属性设置清除按钮的出现时机
+
+    ```typescript
+    clearButtonMode: TextFieldViewMode = TextFieldViewMode.Never
+    ```
+
+* 使用 leftView: [View](#view) 属性设置左侧附加视图
+
+    ```typescript
+    leftView?: View = undefined
+    ```
+
+* 使用 leftViewMode: [TextFieldViewMode](#textfieldviewmode) 属性设置左侧视图的出现时机
+
+    ```typescript
+    leftViewMode: TextFieldViewMode = TextFieldViewMode.Never
+    ```
+
+* 使用 rightView: [View](#view) 属性设置左侧附加视图
+
+    ```typescript
+    rightView?: View = undefined
+    ```
+
+* 使用 rightViewMode: [TextFieldViewMode](#textfieldviewmode) 属性设置左侧视图的出现时机
+
+    ```typescript
+    rightViewMode: TextFieldViewMode = TextFieldViewMode.Never
+    ```
+
+* 使用 allowAutocapitalization 设置是否允许自动首字母大写行为
+
+    ```typescript
+    allowAutocapitalization: Boolean = false
+    ```
+
+* 使用 allowAutocorrection 设置是否允许语法纠正行为
+
+    ```typescript
+    allowAutocorrection: Boolean = false
+    ```
+
+* 使用 allowSpellChecking 设置是否允许拼写检查行为
+
+    ```typescript
+    allowSpellChecking: Boolean = false
+    ```
+
+* 使用 keyboardType: [KeyboardType](#keyboardtype) 属性设置键盘类型
+
+    ```typescript
+    keyboardType: KeyboardType
+    ```
+
+* 使用 returnKeyType: [ReturnKeyType](#returnkeytype) 属性设置 Return 键的显示类型
+
+    ```typescript
+    returnKeyType: ReturnKeyType
+    ```
+
+* 使用 enablesReturnKeyAutomatically 属性设置 Return 键是否允许自动激活（仅 iOS 可用）
+
+    ```typescript
+    enablesReturnKeyAutomatically: Boolean = true
+    ```
+
+* 使用 secureTextEntry 属性设置该 TextField 是否为密码输入框（会使用掩码替代明文）
+
+    ```typescript
+    secureTextEntry: Boolean = false
+    ```
+
+* 你可以通过设置以下属性，获取 TextField 的各种事件回调。
+
+    ```typescript
+    /**
+     * 是否允许开始编辑
+     */
+    shouldBeginEditing?: () => Boolean
+    /**
+     * 当开始编辑时
+     */
+    didBeginEditing?: () => void
+    /**
+     * 是否允许结束编辑
+     */
+    shouldEndEditing?: () => Boolean
+    /**
+     * 当结束编辑时
+     */
+    didEndEditing?: () => void
+    /**
+     * 是否允许字符变更
+     */
+    shouldChange?: (inRange: { location: number, length: number }, replacementString: string) => Boolean
+    /**
+     * 是否允许清空
+     */
+    shouldClear?: () => Boolean
+    /**
+     * 是否允许 Return 行为，一般使用这个回调检测用户是否按下了 Return 键
+     */
+    shouldReturn?: () => Boolean
+    ```
+
+* 使用 focus 方法获得焦点并开始编辑
+
+    ```typescript
+    focus(): void
+    ```
+
+* 使用 blur 方法失去焦点并结束编辑
+
+    ```typescript
+    blur(): void
+    ```
+
+### TextFieldViewMode
+
+* TextFieldViewMode 描述 TextField 附加视图的出现时机
+
+    ```typescript
+    enum TextFieldViewMode {
+        /**
+         * 从不显示
+         */
+        Never,
+        /**
+         * 当 TextField 正在编辑时出现
+         */
+        WhileEditing,
+        /**
+         * 当 TextField 不在编辑状态时出现
+         */
+        UnlessEditing,
+        /**
+         * 一直显示
+         */
+        Always,
+    }
+    ```
+
+### KeyboardType
+
+* KeyboardType 描述键盘类型
+
+    ```typescript
+    enum KeyboardType {
+        /**
+         * 默认键盘
+         */
+        Default = 0,
+        /**
+         * ASCII 字符键盘
+         */
+        ASCIICapable = 1,
+        /**
+         * 数字、标点键盘
+         */
+        NumbersAndPunctuation = 2,
+    }
+    ```
+
+### ReturnKeyType
+
+* ReturnKeyType 描述 ReturnKey 显示类型
+
+    ```typescript
+    enum ReturnKeyType {
+        Default = 0,
+        Go = 1,
+        Next = 4,
+        Search = 6,
+        Send = 7,
+        Done = 9,
+    }
+    ```
+
+## TextView
+
+TextView 继承 [View](#view)，是多行文本输入框，具体 API 与 [TextField](#textfield) 一致。
+
+## TextMeasurer
+
+TextMeasurer 用于计算文本占位大小
+
+* 使用 measureText 方法计算文本占位大小
+
+    ```typescript
+    static measureText(text: string, params: TextMeasureParams): Rect
+    ```
+
+### TextMeasureParams
+
+* 使用 TextMeasureParams 结构体传入文本布局参数，参数含义可参照 (Label)[#label] 相关属性。
+
+    ```typescript
+    interface TextMeasureParams {
+        font: Font;
+        inRect: Rect;
+        numberOfLines?: number
+        letterSpace?: number
+        lineSpace?: number
+    }
+    ```
+
+## HRView
+
+HRView 继承 [View](#view)，用于显示 ** 一像素 ** 宽的直线。
+
+* 使用 position: [HRViewPosition](#hrviewposition) 控制直线渲染的位置。
+
+    ```typescript
+    position: HRViewPosition = HRViewPosition.Top
+    ```
+
+* 使用 color: (Color)[#color] 控制直线的颜色。
+
+    ```typescript
+    color: Color = Color.clearColor
+    ```
+
+### HRViewPosition
+
+* HRViewPosition 描述直线的渲染位置
+
+    ```typescript
+    enum HRViewPosition {
+        Top, /** 水平直线、视图顶部 */
+        Middle, /** 水平直线、视图中部 */
+        Bottom, /** 水平直线、视图底部 */
+        Left, /** 垂直直线、视图左部 */
+        VMiddle, /** 垂直直线、视图中部 */
+        Right, /** 垂直直线、视图右部 */
+    }
+    ```
+
+## WebView
+
+WebView 继承 [View](#view)，用于显示一个网页。
+
+* 使用 load 方法加载页面
+
+    ```typescript
+    load(URLString: string): void
+    ```
+
+* 给以下属性设值可以监听 WebView 事件
+
+    ```typescript
+    onStart?: () => void
+    onFinish?: () => void
+    onFail?: (error: Error) => void
+    ```
+
+## Switch
+
+Switch 继承 [View](#view)，用于显示一个开关按钮。
+
+* 使用 on 属性和 setOn 方法设置 Switch 的开关状态
+
+    ```typescript
+    on: boolean = false
+    setOn(value: boolean, animated: boolean): void
+    ```
+
+* 给 onValueChanged 属性设值监听 Switch 开关状态变化
+
+    ```typescript
+    onValueChanged?: (sender: this) => void
+    ```
+
+## Slider
+
+Slider 继承 [View](#view)，用于显示一个滑杆。
+
+* 使用 value 属性和 setValue 方法设置 Slider 的值
+
+    ```typescript
+    value: number = 0.5
+    setValue(value: number, animated: boolean): void
+    ```
+
+* 给 onValueChanged 属性设值监听 Switch 开关状态变化
+
+    ```typescript
+    onValueChanged?: (sender: this) => void
+    ```
+
+## ActivityIndicatorView
+
+ActivityIndicatorView 继承 [View](#view)，用于显示一个加载指示器。
+
+* 使用 style 属性设置加载指示器的样式
+
+    ```typescript
+    style: ActivityIndicatorViewStyle = ActivityIndicatorViewStyle.Regular
+    ```
+
+* 使用 animating 属性获取当前动画状态
+
+    ```typescript
+    readonly animating: boolean
+    ```
+
+* 使用 hidesWhenStopped 属性设置动画停止时是否隐藏指示器
+
+    ```typescript
+    hidesWhenStopped: boolean = true
+    ```
+
+* 使用 startAnimating 使指示器开始工作，其中 delay 参数表示指示器在 N 秒后开始动画。
+
+    ```typescript
+    startAnimating(delay?: number): void
+    ```
+
+* 使用 stopAnimating 使指示器停止工作
+
+    ```typescript
+    stopAnimating(): void
+    ```
+
+### ActivityIndicatorViewStyle
+
+* ActivityIndicatorViewStyle 描述加载指示器的样式
+
+    ```typescript
+    enum ActivityIndicatorViewStyle {
+        Regular,
+        Large,
+    }
+    ```
+
+## Alert
+
+使用 Alert 弹出一个提示框。
+
+* 创建一个 Alert
+
+    ```typescript
+    constructor(message: string)
+    ```
+
+* 使用 buttonTitle 属性设置按钮标题
+
+    ```typescript
+    buttonTitle: string
+    ```
+
+* 使用 show 方法弹出模态窗口并接收回调
+
+    ```typescript
+    show(callback?: () => void): void
+    ```
+
+## Confirm
+
+使用 Confirm 弹出一个确认框
+
+* 创建一个 Confirm
+
+    ```typescript
+    constructor(message: string)
+    ```
+
+* 使用 confirmTitle 属性设置确认按钮标题
+
+    ```typescript
+    confirmTitle: string
+    ```
+
+* 使用 cancelTitle 属性设置取消按钮标题
+
+    ```typescript
+    cancelTitle: string
+    ```
+
+* 使用 show 方法弹出模态窗口并接收回调（resolve 表示确认，reject 表示取消）
+
+    ```typescript
+    show(resolve: () => void, reject: () => void): void
+    ```
+
+## Prompt
+
+使用 Prompt 弹出一个模态输入框
+
+* 创建一个 Prompt
+
+    ```typescript
+    constructor(message: string)
+    ```
+
+* 使用 confirmTitle 属性设置确认按钮标题
+
+    ```typescript
+    confirmTitle: string
+    ```
+
+* 使用 cancelTitle 属性设置取消按钮标题
+
+    ```typescript
+    cancelTitle: string
+    ```
+
+* 使用 placeholder 属性设置输入框占位文本
+
+    ```typescript
+    placeholder: string
+    ```
+
+* 使用 defaultValue 属性设置输入框默认文本
+
+    ```typescript
+    defaultValue: string
+    ```
+
+* 使用 show 方法弹出模态窗口并接收回调（resolve 表示确认，reject 表示取消）
+
+    ```typescript
+    show(resolve: () => void, reject: () => void): void
+    ```
+
+## ViewController
+
+ViewController，是一个用于控制 View 的类。
+
+* 重写 loadView 方法可以加载一个自定义的 View 作为顶级视图
+
+    ```typescript
+    loadView(): void
+    ```
+
+* 使用 view 属性获取顶级视图
+
+    ```typescript
+    readonly view: View
+    ```
+
+* 以下方法会在适当的时候被调用，你可以重写这些方法。
+
+    ```typescript
+    viewDidLoad(): void
+    viewWillAppear(): void
+    viewDidAppear(): void
+    viewWillDisappear(): void
+    viewDidDisappear(): void
+    viewWillLayoutSubviews(): void
+    viewDidLayoutSubviews(): void
+    ```
+
+* 使用 title 属性设定 ViewController 的标题，标题将显示在 NavigationBar 中。
+
+    ```typescript
+    title: string = ""
+    ```
+
+* 使用 layoutOptions 属性设置系统元素风格（当前只对 Android 有效）
+
+    ```typescript
+    layoutOptions: ViewControllerLayoutOptions[] = [ViewControllerLayoutOptions.AndroidDark]
+    ```
+
+* 使用 safeAreaInsets: [Insets](#insets) 获取安全边界，避免系统元素遮挡视图元素。
+
+    ```typescript
+    readonly safeAreaInsets: Insets
+    ```
+
+* 使用 addChildViewController 和 removeFromParentViewController 方法添加子 ViewController 或将本 ViewController 从父 ViewController 中移除。
+
+    ```typescript
+    addChildViewController(childController: ViewController): void
+    removeFromParentViewController(): void
+    ```
+
+* 使用 parentViewController 和 childViewControllers 属性获取父、子 ViewController。
+
+    ```typescript
+    readonly parentViewController?: ViewController
+    childViewControllers: ViewController[]
+    ```
+
+* 以下方法会在适当的时候被调用，你可以重写这些方法。
+
+    ```typescript
+    willMoveToParentViewController(parent?: ViewController): void
+    didMoveToParentViewController(parent?: ViewController): void
+    ```
+
+* 使用 presentViewController 和 dismissViewController 方法使用模态的方式显示、隐藏视图。
+
+    ```typescript
+    presentViewController(viewController: ViewController, animated?: boolean): void
+    dismissViewController(animated?: boolean): void
+    ```
+
+* 重写 keyboardAvoidingMode keyboardWillShow keyboardWillHide 方法，以避免输入内容被软键盘遮挡。
+
+    ```typescript
+    keyboardAvoidingMode(): KeyboardAvoidingMode
+    keyboardWillShow(frame: Rect, duration: number): void
+    keyboardWillHide(duration: number): void
+    ```
+
+* 给 supportOrientations: [DeviceOrientation](#deviceorientation)[] 赋值锁定界面支持的旋转方向
+
+    ```typescript
+    supportOrientations: DeviceOrientation[] = [DeviceOrientation.Portrait]
+    ```
+
+* 使用 navigationController 属性获取当前附着的 NavigationController
+
+    ```typescript
+    readonly navigationController?: NavigationController
+    ```
+
+* 使用 navigationBar: [NavigationBar](#navigationbar) 属性获取导航栏，使用 showNavigationBar 和 hideNavigationBar 控制导航栏显示或隐藏。
+
+    ```typescript
+    readonly navigationBar: NavigationBar
+    showNavigationBar(animated?: boolean): void
+    hideNavigationBar(animated?: boolean): void
+    ```
+
+### ViewControllerLayoutOptions
+
+    ```typescript
+    enum ViewControllerLayoutOptions {
+        None,
+        AndroidLight,
+        AndroidDark,
+    }
+    ```
+
+### NavigationBar
+
+NavigationBar 继承 [View](#view)，依附于 ViewController 上，用于显示导航栏，同时也可使用 NavigationBar 控制系统状态栏的样式。
+
+* 使用 title 属性设置导航栏的标题
+
+    ```typescript
+    title: string = ""
+    ```
+
+* 使用 translucent 属性设置导航栏是否透明
+
+    ```typescript
+    translucent: boolean = false
+    ```
+
+* 使用 lightContent 属性设置导航栏以及状态栏的文字、图标颜色
+
+    ```typescript
+    lightContent: boolean = false
+    ```
+
+* 使用以下方法设置导航栏的左侧、右侧图标
+
+    ```typescript
+    setLeftBarButtonItem(navigationItem?: NavigationBarButtonItem): void
+    setLeftBarButtonItems(navigationItems: NavigationBarButtonItem[]): void
+    setRightBarButtonItem(navigationItem?: NavigationBarButtonItem): void
+    setRightBarButtonItems(navigationItems: NavigationBarButtonItem[]): void
+    ```
+
+#### NavigationBarButtonItem
+
+NavigationBarButtonItem 表示一个导航栏的按钮。
+
+* 使用 image 属性设置图标或使用 title 属性设置标题
+
+    ```typescript
+    image?: Image
+    title?: string
+    ```
+
+* 使用 customView: [View](#view) 属性设定一个自定义的视图    
+
+    ```typescript
+    customView?: View = undefined
+    ```
+
+* 给 onTouchUpInside 设值以响应按钮点按事件
+
+    ```typescript
+    onTouchUpInside?: () => void = undefined
+    ```
+
+## NavigationController
+
+NavigationController 继承 [ViewController](#viewcontroller)，用于控制多个场景间的切换。
+
+* 初始化
+
+    ```typescript
+    constructor(rootViewController?: ViewController)
+    ```
+
+* 使用以下方法推入、移出视图
+
+    ```typescript
+    pushViewController(viewController: ViewController, animated?: boolean): void
+    popViewController(animated?: boolean): ViewController | undefined
+    popToViewController(viewController: ViewController, animated?: boolean): ViewController[]
+    popToRootViewController(animated?: boolean): ViewController[]
+    ```
+
+## Screen
+
+使用 Screen 类获取当前屏幕信息
+
+* 使用单例
+
+    ```typescript
+    static mainScreen: Screen
+    ```
+
+* 获取宽、高、倍率
+
+    ```typescript
+    readonly width: number;
+    readonly height: number;
+    readonly scale: number;
+    bounds(): Rect
+    ```
+
+## Device
+
+使用 Device 类获取当前机器信息
+
+* 使用单例
+
+    ```typescript
+    static current: Device
+    ```
+
+* 获取信息
+
+    ```typescript
+    /**
+     * 机器名称
+     */
+    name: string
+    /**
+     * 系统名称
+     */
+    systemName: string
+    /**
+     * 系统版本号
+     */
+    systemVersion: string
+    /**
+     * 机器型号
+     */
+    model: string
+    ```
+
+## Others
 
 ### Rect
 
@@ -908,6 +1921,25 @@ LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
     function SizeMake(width: number, height: number): Size
     function SizeEqual(size1: Size, size2: Size): boolean
     const SizeZero: Size
+    ```
+
+### Insets
+
+* Insets 结构体用于描述边界大小 
+
+    ```typescript
+    interface Insets {
+        readonly top: number;
+        readonly left: number;
+        readonly bottom: number;
+        readonly right: number;
+    }
+    ```
+
+* 使用以下方法操作 Insets 结构数据
+
+    ```typescript
+    function InsetsMake(top: number, left: number, bottom: number, right: number): Insets
     ```
 
 ### TransformMatrix
@@ -997,31 +2029,6 @@ LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
     equals(toColor: Color | undefined): boolean
     ```
 
-### InteractionState
-
-* InteractionState 用于描述当前触摸状态
-
-    ```typescript
-    enum InteractionState {
-        /**
-         * 触摸开始
-         */
-        Began,
-        /**
-         * 触摸持续
-         */
-        Changed,
-        /**
-         * 触摸结束
-         */
-        Ended,
-        /**
-         * 触摸取消
-         */
-        Cancelled,
-    }
-    ```
-
 ### Font
 
 * Font 类用于描述字体样式
@@ -1061,95 +2068,4 @@ LoadMoreControl  用于 [ListView](#listview) 加载更多功能。
      * 返回系统斜体 
      */
     static italicSystemFontOfSize(pointSize: number): Font
-    ```
-
-### LayoutAttribute
-
-LayoutAttribute 描述约束边界类型
-
-    ```typescript
-    enum LayoutAttribute {
-        Const = 0,
-        Left = 1,
-        Right = 2,
-        Top = 3,
-        Bottom = 4,
-        Width = 7,
-        Height = 8,
-        CenterX = 9,
-        CenterY = 10,
-    }
-    ```
-
-### LayoutRelation
-
-LayoutRelation 描述约束数值对比方法
-
-    ```typescript
-    enum LayoutRelation {
-        Less = -1,
-        Equal = 0,
-        Greater = 1,
-    }
-    ```
-
-### ImageRenderingMode
-
-ImageRenderingMode 描述图片的渲染方式
-
-    ```typescript
-    enum ImageRenderingMode {
-        /**
-         * 使用原图渲染
-         */
-        Original,
-        /**
-         * 使用视图主色（tintColor）渲染
-         */
-        Template,
-    }
-    ```
-
-### ContentMode
-
-ContentMode 描述视图内容的拉伸方式
-
-    ```typescript
-    enum ContentMode {
-        /**
-         * 非比例拉伸，铺满视图
-         */
-        ScaleToFill,
-        /**
-         * 等比例拉伸，并且不会超出视图区域
-         */
-        ScaleAspectFit,
-        /**
-         * 等比例拉伸，可能超出视图区域
-         */
-        ScaleAspectFill,
-    }
-    ```
-
-### TextAlignment
-
-TextAlignment 描述文本水平对齐方式
-
-    ```typescript
-    enum TextAlignment {
-        Left,
-        Center,
-        Right,
-    }
-    ```
-
-### LineBreakMode
-
-LineBreakMode 描述水平换行方式
-
-    ```typescript
-    enum LineBreakMode {
-        WordWrapping = 0,
-        TruncatingTail = 4,
-    }
     ```

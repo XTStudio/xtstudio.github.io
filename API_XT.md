@@ -10,6 +10,22 @@
 XT.minSDK = "0.1.0" /* @available(0.1.0) */
 ```
 
+## currentSDK
+
+使用 currentSDK 获取当前 SDK 版本。
+
+```typescript
+const currentSDK: string
+```
+
+## platform
+
+使用 platform 获取当前平台。
+
+```typescript
+const platform: "iOS" | "Android" | "Web"
+```
+
 ## ClassType
 
 ```typescript
