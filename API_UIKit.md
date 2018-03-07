@@ -6,7 +6,7 @@
 
 Context 是一个可交互应用的入口，你可以通过以下方法创建上下文，其中 ```options``` 参数将传递至 ```AppDelegate:applicationDidFinishLaunchingWithOptions``` 方法中。
 
-* 使用 name 创建（ app.min.js 文件已打包到应用内）
+* 使用 name 创建（如果 app.min.js 文件已打包到应用内）
 
     ```typescript
     static startWithNamed(name: string, options: any, completion: (rootViewController: ViewController) => void): Context
