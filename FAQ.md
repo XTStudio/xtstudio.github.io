@@ -26,34 +26,9 @@
 
 但是，下面的情况，你需要手动管理内存（我们正在努力解决这些问题），否则，对应的对象在 Native 端将被回收。
 
-1. ```fooView``` 在创建后，没有及时被添加到任何 ```view``` 中。
-2. ```fooView``` 执行 ```removeFromSuperview``` 后，需要在往后某个时间点，再次使用。
+### 延时调用
 
-### retain
-
-针对以上情况，只需要使用 ```retain``` 方法即可。
-
-```javascript
-class HelloViewController extends UI.ViewController {
-
-	fooView = new UI.View().retain(this)
-
-	viewDidLoad() {
-		super.viewDidLoad()
-		setTimeout(() => {
-			this.view.addSubview(this.fooView)
-		}, 3000)
-	}
-
-}
-```
-
-* ```retain(this)``` 表示，```fooView``` 的生命周期将随着 ```HelloViewController``` 释放而结束。
-* 你可以忽略第一个参数，直接使用 ```retain()```，这样，```fooView``` 将在应用中止时释放。
-
-### release
-
-一般情况下，你不需要调用 ```release``` 方法，但以下情况需要。
+如果一个对象，需要被延时调用，则需要手动 retain，在调用完成后，手动调用 release。 
 
 ```javascript
 class HelloViewController extends UI.ViewController {
@@ -72,9 +47,28 @@ class HelloViewController extends UI.ViewController {
 }
 ```
 
-* 之所以使用 ```retain``` 是因为，我们需要延时后调用 ```data``` 对象，如果不执行 ```retain```，对象会被即时释放。
-* 当对象已经使用完毕后，执行 ```release``` 可以及时地释放对象，以减少内存占用。
-* 如果忘记 ```release```，对象则会在应用中止后释放。
+* 如果忘记调用 ```release```，对象会在应用中止后释放。
+
+### 继承 XT.BaseObject 
+
+当你需要声明一个 ```class``` 的时候，我们建议你将其继承 ```XT.BaseObject```，它会自动管理对该类下的对象进行引用计数。
+
+```typescript
+class FooClass extends XT.BaseObject {
+	// your code
+}
+```
+
+### 使用 XT.BaseArray 替代 Array
+
+强烈建议你使用 ```XT.BaseArray``` 替代普通数组，```XT.BaseArray``` API 与 Array 完全一致，BaseArray 会自动管理对数组元素进行引用计数。
+
+```typescript
+const fooArray = new XT.BaseArray([1, 2, 3])
+fooArray.push(4)
+fooArray.pop()
+fooArray.clear()
+```
 
 ## 屏幕旋转
 
@@ -110,7 +104,7 @@ class HelloViewController extends UI.ViewController {
 ### JavaScript 线程太忙
 
 * 请勿在 JavaScript 主线程中执行过多计算操作。
-* 可以通过创建 ```NS.Context``` 线程的方式进行密集计算，然后将结果发送回 JavaScript 主线程。
+* 可以通过创建 ```NS.Context``` 线程的方式进行密集计算，然后将结果发送回 JavaScript 主线程（暂未实现）。
 
 ## 图片资源
 
