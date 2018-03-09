@@ -62,7 +62,7 @@ class HelloViewController extends UI.ViewController {
 	}
 
 	loadData() {
-		NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=0", (data) => {
+		NS.URLSession.sharedSession.dataTaskWithURL("http://xt-studio.com/GHUser/0.json", (data) => {
 			if (data) {
 				try {
 					const json: any[] = JSON.parse(data.utf8String())

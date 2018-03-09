@@ -720,7 +720,7 @@ this.scrollView.contentSize = UI.SizeMake(0, 900)
 
 ListView 具有良好的内存管理机制，在 ```UI.ListView``` 管理下的 ```UI.ListCell``` 会被复用，当一个 Cell 滚出屏幕可见范围时，它会被重复利用，即使存在十万个 Cell，也不存在严重的性能问题。
 
-在下面的例子中，我们会展示如何在 ```UI.ListView``` 中呈现一个用户列表，接口数据来自 GitHub [https://api.github.com/users?since=0](https://api.github.com/users?since=0)。
+在下面的例子中，我们会展示如何在 ```UI.ListView``` 中呈现一个用户列表，接口数据来自 GitHub [http://xt-studio.com/GHUser/0.json](http://xt-studio.com/GHUser/0.json)。
 
 #### 创建一个 ListCell 子类
 
@@ -820,7 +820,7 @@ loadData() {
 
 ```typescript
 loadData() {
-	NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=0", (data) => {
+	NS.URLSession.sharedSession.dataTaskWithURL("http://xt-studio.com/GHUser/0.json", (data) => {
 		if (data) {
 			try {
 				const json: any[] = JSON.parse(data.utf8String())
