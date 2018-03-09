@@ -120,7 +120,7 @@ var ListViewSample = /** @class */ (function (_super) {
     };
     ListViewSample.prototype.loadData = function (complete) {
         var _this = this;
-        NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=" + this.since.toString(), function (data) {
+        NS.URLSession.sharedSession.dataTaskWithURL("http://xt-studio.com/GHUser/" + this.since.toString() + ".json", function (data) {
             if (data) {
                 try {
                     var json = JSON.parse(data.utf8String());

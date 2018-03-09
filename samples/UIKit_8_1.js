@@ -67,7 +67,7 @@ var HelloViewController = /** @class */ (function (_super) {
     };
     HelloViewController.prototype.loadData = function () {
         var _this = this;
-        NS.URLSession.sharedSession.dataTaskWithURL("https://api.github.com/users?since=0", function (data) {
+        NS.URLSession.sharedSession.dataTaskWithURL("http://xt-studio.com/GHUser/0.json", function (data) {
             if (data) {
                 try {
                     var json = JSON.parse(data.utf8String());
