@@ -122,9 +122,9 @@ self.context = [[XTUIContext alloc] initWithSourceURL:sourceURL
 2. 在应用 build.gradle 中添加依赖
     ```
     dependencies {
-        compile 'com.github.XTStudio.XT:core:0.1.1'
-        compile 'com.github.XTStudio.XT:foundation:0.1.1'
-        compile 'com.github.XTStudio.XT:uikit:0.1.1'
+        compile 'com.github.XTStudio.XT:core:0.1.2'
+        compile 'com.github.XTStudio.XT:foundation:0.1.2'
+        compile 'com.github.XTStudio.XT:uikit:0.1.2'
 	}
     ```
 
