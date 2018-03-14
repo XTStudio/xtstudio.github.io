@@ -29,7 +29,12 @@
 在 iOS 上集成运行时的最佳方式是 CocoaPods，如果你还不懂如何使用 CocoaPods 请自行 Google 之。
 
 1. 集成前，先使用 ```pod setup``` 将 repos 升级至最新。
-2. 在 ```Podfile``` 中添加依赖 ```pod 'XT'```。
+2. 在 ```Podfile``` 中添加以下依赖
+    ```
+    pod 'XT/Core'
+    pod 'XT/Foundation'
+    pod 'XT/UIKit'
+    ```
 3. 执行 ```pod install```。
 
 #### 添加 app.min.js
@@ -122,9 +127,9 @@ self.context = [[XTUIContext alloc] initWithSourceURL:sourceURL
 2. 在应用 build.gradle 中添加依赖
     ```
     dependencies {
-        compile 'com.github.XTStudio.XT:core:0.1.2'
-        compile 'com.github.XTStudio.XT:foundation:0.1.2'
-        compile 'com.github.XTStudio.XT:uikit:0.1.2'
+        compile 'com.github.XTStudio.XT:core:0.2.0'
+        compile 'com.github.XTStudio.XT:foundation:0.2.0'
+        compile 'com.github.XTStudio.XT:uikit:0.2.0'
 	}
     ```
 
