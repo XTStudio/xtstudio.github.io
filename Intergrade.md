@@ -214,7 +214,7 @@ override fun onDestroy() {
 
 <body class="UIContext" src="./app.min.js" options='{"foo": "value"}'></body>
 
-<script src="https://cdn.jsdelivr.net/npm/xt-studio@0.1.0/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xt-studio@0.2.0/index.min.js"></script>
 
 </html>
 ``` 
