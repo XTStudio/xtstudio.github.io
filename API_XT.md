@@ -59,3 +59,31 @@ XT.ClassLoader.loadClass(XT.ClassType.Java, "com.opensource.xtsample.FooClass", 
     XT.ClassLoader.loadClass(XT.ClassType.JavaScript, FooClass, "Foo")
 })();
 ```
+
+## ExtObject
+
+使用 ExtObject 扩展一个原生类，用于逻辑类扩展。
+
+### className
+
+使用 className 确定原生类的名称
+
+```typescript
+static className: string
+```
+
+### defineFunction
+
+使用 ```defineFunction``` 方法，定义一个原生实例方法。
+
+```typescript
+defineFunction(prop: string): any
+```
+
+### defineProperty
+
+使用 ```defineProperty``` 方法，定义一个原生成员变量。
+
+```typescript
+defineProperty(prop: string, defaultValue?: any): any
+```
