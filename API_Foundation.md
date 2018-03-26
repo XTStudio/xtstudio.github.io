@@ -380,3 +380,52 @@
     ```typescript
     close(): void 
     ```
+
+## Database
+
+使用 ```NS.Database``` 在本地创建一个 Sqlite 数据库。
+
+* 初始化
+
+```typescript
+constructor(name: string, location?: "document" | "cache" | "tmp")
+```
+
+* 打开连接
+
+```typescript
+open(): Promise<boolean>
+```
+
+* 查询数据
+
+```typescript
+executeQuery(sql: string, ...values: any[]): Promise<{ [key: string]: any }[]>
+```
+
+* 执行更新（单条 SQL）
+
+```typescript
+executeUpdate(sql: string, ...values: any[]): Promise<boolean>
+```
+
+
+* 执行更新（多条 SQL）
+
+```typescript
+executeStatements(sql: string): Promise<boolean>
+```
+
+
+* 执行事务
+
+```typescript
+executeTransaction(exec: () => void, rollback: boolean): Promise<boolean>
+```
+
+
+* 关闭连接并清空数据库
+
+```typescript
+destory(): Promise<boolean>
+```

@@ -253,3 +253,74 @@ NS.NotificationCenter.default.postNotification("FooEvent", "Hello, World!", { aK
 ```typescript
 NS.NotificationCenter.default.removeObserver(this.observer)
 ```
+
+## 本地数据库
+
+使用 ```NS.Database``` API 可以在本地创建一个 Sqlite 数据库（关于 Sqlite 的 SQL 语法使用请自行 Google）。
+
+### 创建数据库
+
+我们可以在不同的容器中创建数据库，它们分别是 document / cache / tmp，有以下区别。
+
+* document，只能存储由用户主动生成的数据，它会被 iCloud 自动备份，在 document 仓库写入缓存文件可能被 App Store 拒绝上架。
+* cache，用于保存缓存数据，它会在用户手机空间不足时被自动删除。
+* tmp，用于保存临时数据，它会在应用结束或者用户手机空间不足时被自动删除。
+
+在使用数据库前，让我们先创建一个数据库实例。
+
+```typescript
+const database = new NS.Database("foo.sqlite", "document")
+```
+
+### 打开数据库
+
+创建数据库实例后，我们必须调用 ```open``` 方法，打开数据库连接，打开方法是一个 ```Promise``` 方法，我们可以使用 ```await``` 完成调用。
+
+```typescript
+await database.open()
+```
+
+### 创建一个表
+
+```executeStatements``` 用于执行多条 SQL 命令，它也是一个 ```Promise``` 方法，执行成功后。
+
+```typescript
+await database.executeStatements("CREATE TABLE car (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);")
+```
+
+### 插入一条数据
+
+```executeUpdate``` 用于执行一条 SQL 命令，你应始终使用数据绑定的方式传入参数（避免 SQL 注入攻击）。
+
+```typescript
+await database.executeUpdate("INSERT INTO car VALUES (?, ?)", null, "Crosstour")
+```
+
+### 查询数据
+
+```executeQuery``` 用于查询数据，同样的，你应始终使用数据绑定的方式传入参数。
+
+```typescript
+const rows = await database.executeQuery("SELECT * FROM car WHERE name = ?", "Crosstour")
+```
+
+### 执行事务
+
+当你需要执行大批量的更新时，建议使用事务的方式进行（性能提升）。
+
+当你需要执行一批操作，并且希望操作中的任何一条指令失败时，能自动回滚时，应使用事务方法执行。
+
+```typescript
+await database.executeTransaction(() => {
+    database.executeUpdate("INSERT INTO car VALUES (?, ?)", null, "皇冠")
+    database.executeUpdate("INSERT INTO car VALUES (?, ?)", 1, "XXX")
+}, true) // 当第二个参数为 true 时，数据库遇到错误会自动回滚。
+```
+
+### 销毁数据库
+
+在需要时，可以调用 ```destory``` 方法，清空数据库。
+
+```typescript
+await database.destory()
+```

@@ -127,9 +127,9 @@ self.context = [[XTUIContext alloc] initWithSourceURL:sourceURL
 2. 在应用 build.gradle 中添加依赖
     ```
     dependencies {
-        compile 'com.github.XTStudio.XT:core:0.2.0'
-        compile 'com.github.XTStudio.XT:foundation:0.2.0'
-        compile 'com.github.XTStudio.XT:uikit:0.2.0'
+        compile 'com.github.XTStudio.XT:core:0.3.1'
+        compile 'com.github.XTStudio.XT:foundation:0.3.1'
+        compile 'com.github.XTStudio.XT:uikit:0.3.1'
 	}
     ```
 
@@ -214,7 +214,7 @@ override fun onDestroy() {
 
 <body class="UIContext" src="./app.min.js" options='{"foo": "value"}'></body>
 
-<script src="https://cdn.jsdelivr.net/npm/xt-studio@0.2.0/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xt-studio@0.3.1/index.min.js"></script>
 
 </html>
 ``` 
