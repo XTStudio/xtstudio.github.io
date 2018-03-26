@@ -6,7 +6,7 @@
 
 ### iOS
 
-在 iOS 中，我们依赖 ```JavaScriptCore``` 系统框架，可以运行所有 ES6 代码（ 借助 TypeScript 编译至 ES5 ），但在 iOS 10.3 以下系统中会缺失部分 ES6 类（例如 Promise 库），你可以通过 shim 的方式补全这些类。
+在 iOS 中，我们依赖 ```JavaScriptCore``` 系统框架，可以运行所有 ES6 代码（ 借助 TypeScript 编译至 ES5 ），在 ES5 环境下，我们已经通过 Polyfills 的方式补全了大部分 ES6 类库。
 
 ### Android
 
@@ -14,11 +14,7 @@
 
 ### Web
 
-在 Web 中，JavaScript 的运行环境并不固定，但可以确定的一点是所有 ES6 代码（ 借助 TypeScript 编译至 ES5 ）都可以运行，ES6 类的缺失也可以通过 shim 的方式补全。
-
-### shim
-
-如果需要使用 shim 库，建议使用 [https://github.com/paulmillr/es6-shim](https://github.com/paulmillr/es6-shim)。
+在 Web 中，JavaScript 的运行环境并不固定，但可以确定的一点是所有 ES6 代码（ 借助 TypeScript 编译至 ES5 ）都可以运行，框架本身已经通过 ```es6-shim``` 对 ES5 环境进行 Polyfill。
 
 ## 内存管理
 
@@ -90,7 +86,7 @@ fooArray.clear()
 
 ### Web 平台
 
-在 iOS 中，会始终使用 Pan 模式。在 Android 中，这个问题，无法解决，因此，建议在 Web 页面中，将 TextField 放置在最上方，以避免键盘遮挡问题。
+在 Web 中，会始终使用 Pan 模式。
 
 ## 卡顿
 
