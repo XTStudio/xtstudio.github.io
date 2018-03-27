@@ -24,18 +24,12 @@ XT 与其它框架十分类似，却更具特色，如果希望了解 XT 与它�
 
 ### Web
 
-* 在界面上，XT 基于 SVG 进行渲染。
+* 在界面上，XT 基于 HTML / CSS 进行渲染。
 * 在 JavaScript 上，XT 依赖浏览器、WebView 的运行环境。
 
 ## 起步
 
 > 我们假定你已经了解关于 TypeScript / JavaScript 的中级知识。如果你是一个 TypeScript 新手，我们建议你先学习好基础知识再来看这篇指南。
-
-> 如果你是一个 iOS 开发者，那么，你会在 XT 学习过程中，感觉良好。
-
-> 如果你是一个 Android 开发者，在 XT 的学习过程中，可以得到不少启发。
-
-> 如果你是一个 Web 开发者，可能需要一些思维上的转换，才能学懂 XT。
 
 尝试 XT 最简单的方法是使用 [Playground](http://xt-studio.com/XT-Playground-Web/)。你可以在浏览器新标签页中打开它，跟着例子学习一些基础用法。
 
