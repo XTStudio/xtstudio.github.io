@@ -512,6 +512,12 @@ ImageView 继承 [View](#view)，用于渲染一张图片。
 
 Image 用于描述一张图片
 
+* 通过本地路径加载一个图片
+
+    ```typescript
+    static fromSource(localPath: string): Image
+    ```
+
 * 通过服务器地址创建图片
 
     ```typescript

@@ -650,12 +650,10 @@ class HelloViewController extends UI.ViewController {
 
 以下例子演示了，如何加载一张本地图片（由于浏览器限制，Playground 无法在线预览本例子）。
 
-在下面的例子中，你可以把 ```require('./success@2x.png')``` 当作 ```UI.Image``` 实例使用。
-
 ```typescript
 const view = new UI.ImageView()
 view.frame = UI.RectMake(0, 66, 78, 78)
-view.image = require('./success@2x.png')
+view.image = UI.Image.fromSource('./success@2x.png')
 ```
 
 * 你需要把 ```success@2x.png``` 放置在合适的目录，require 图片路径相对于当前 ts 文件。
