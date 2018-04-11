@@ -20,6 +20,12 @@
 2. 使用 Android Studio 打开 Playground.xcworkspace 并构建至手机中。
 3. 运行 Playground 应用，扫码或输入 IP 地址预览应用。
 
+### 扫码安装
+
+你可以使用手机扫码下载 APK 安装 Playground
+
+![Playground QRCode](./res/android_apk_download.png)
+
 ## Web
 
 你可以使用在线 Playground 调试页面 [http://xt-studio.com/XT-Playground-Web/](http://xt-studio.com/XT-Playground-Web/)。
