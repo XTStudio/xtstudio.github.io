@@ -12,6 +12,8 @@
 
 ## Android
 
+### 从源码安装
+
 使用 Android Studio 将 Playground 应用安装至手机上。
 
 1. 下载仓库源码 https://github.com/XTStudio/XT-Playground-Android 。
